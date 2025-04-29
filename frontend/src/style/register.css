@@ -1,0 +1,206 @@
+/* General Auth Styles */
+.auth-container {
+  max-width: 400px;
+  margin: auto;
+  background: #F8F9FA;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.logo-section h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1A9E53;
+}
+
+.logo-section p {
+  margin-top: -10px;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: #4CAF50;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 1rem;
+}
+
+.auth-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-primary {
+  background-color: #1A9E53;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #168b45;
+}
+
+.forgot-password, .switch-auth {
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.divider {
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+.social-login button {
+  margin: 0 5px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-size: cover;
+}
+
+.google-btn {
+  background-image: url('../image/google.png');
+}
+
+.facebook-btn {
+  background-image: url('../image/facebook.png');
+}
+
+.checkbox-terms {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
+
+/* Menú Estilo Compartido */
+.menu-admin, .menu-cliente {
+  background-color: #1A9E53;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+
+.contenido-admin, .contenido-cliente {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.menu-links {
+  display: flex;
+  list-style: none;
+  margin-left: auto;
+}
+
+.menu-links li {
+  margin-left: 20px;
+}
+
+.menu-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.menu-links a:hover {
+  color: #c4f0d2;
+  text-decoration: underline;
+}
+
+/* Contenido Principal */
+.contenido-principal {
+  padding: 2rem;
+  text-align: center;
+}
+
+.contact-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.contact-title {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.contact-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.contact-icon {
+  display: inline-block;
+}
+
+.contact-img {
+  width: 40px; /* Puedes ajustar el tamaño de las imágenes aquí */
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.contact-img:hover {
+  transform: scale(1.2); /* Agrega un efecto de zoom cuando el usuario pase el mouse sobre las imágenes */
+}
+
+
+
+
+
+.producto-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
+}
+
+.producto-item img {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.producto-item h3 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.producto-item p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.producto-item strong {
+  font-size: 1.5rem;
+  color: #1A9E53;
+}
+
