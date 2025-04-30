@@ -54,8 +54,8 @@ function ProductosList() {
               />
               <div className="producto-info">
                 <h3>{producto.Nombre}</h3>
-                <p><strong>Precio:</strong> ${producto.Precio}</p>
-                <p><strong>Descripción:</strong> {producto.Descripcion}</p>
+                <p><strong>Precio :</strong> ${producto.Precio}</p>
+                <p><strong>Descripción :</strong> {producto.Descripcion}</p>
                 <p><strong>Tamaño:</strong> {producto.Tamaño} g</p>
                 <p><strong>Calorías:</strong> {producto.Calorias} kcal</p>
               </div>
