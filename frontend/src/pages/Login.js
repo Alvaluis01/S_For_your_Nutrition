@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
+
   const [role, setRole] = useState('');  // 'admin' o 'cliente'
   const navigate = useNavigate();
-
   const handleLogin = () => {
     if (role) {
       // Guardar el rol del usuario en localStorage

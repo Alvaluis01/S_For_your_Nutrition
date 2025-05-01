@@ -12,6 +12,8 @@ import LoginCliente from './pages/LoginCliente';
 import LoginAdmin from './pages/LoginAdmin';
 import ProductList from './pages/ProductList';  // Importa ProductList
 import Comprar from './pages/Comprar';
+import Registrar from './pages/RegistroCliente';
+import Ingresar from './pages/Ingresar';
 
 
 function App() {
@@ -47,6 +49,9 @@ function AppContent() {
         <Route path="/logincliente" element={<LoginCliente />} />
         <Route path="/loginadmin" element={<LoginAdmin />} />
         <Route path="/comprar" element={<Comprar />} />
+        <Route path="/registrar" element={<Registrar />} />
+        <Route path="/ingresar" element={<Ingresar />} />
+        
       </Routes>
     </>
   );

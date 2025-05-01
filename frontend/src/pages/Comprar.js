@@ -1,315 +1,141 @@
-import React, { useState, useEffect } from 'react';
-import '../style/register.css'; // Asegúrate de que este archivo exista
-
-function Pedido() {
+import React, { useState } from 'react';
 
 
-    const [pedido, setPedido] = useState({
-        id_cliente: '',
-        id_ingrediente: '',
-        id_tipo_compra: '',
-        ubicacion_entrega: '',
-        id_metodo_pago: '',
-        total: 0,
-      });
-      
-  
+function App() {
+  const [carrito, setCarrito] = useState([]);
 
-  const [ingredientes, setIngredientes] = useState([]);
-  const [tiposCompra, setTiposCompra] = useState([]);
-  const [metodosPago, setMetodosPago] = useState([]);
+  const agregarAlCarrito = (item) => setCarrito([...carrito, item]);
 
-  useEffect(() => {
-    // Obtener ingredientes desde la API
+  const enviarPedido = async () => {
+    const pedido = {
+      Id_cliente: 1,
+      Fecha: new Date().toISOString().split('T')[0],
+      Estado: 'Pendiente',
+      Id_tipo_compra: 1,
+      Ubicacion_entrega: 'Calle Falsa 123',
+      Total: 9999,
+      Id_Metodo_pago: 1,
+      carrito
+    };
 
-
-
-    fetch('http://localhost/back_s_for_you_nutrition/public/ingredientes')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Ingredientes:', data);
-        setIngredientes(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los ingredientes:', error);
-      });
-
-    // Obtener tipos de compra desde la API
-    fetch('http://localhost/back_s_for_you_nutrition/public/tiposcompra')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Tipos de compra:', data);
-        setTiposCompra(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los tipos de compra:', error);
-      });
-
-    // Obtener métodos de pago desde la API
-    fetch('http://localhost/back_s_for_you_nutrition/public/metodospago')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Métodos de pago:', data);
-        setMetodosPago(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los métodos de pago:', error);
-      });
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setPedido((prevState) => {
-      const updatedPedido = { ...prevState, [name]: value };
-
-      // Calcular el total basado en el ingrediente seleccionado
-      if (name === 'id_ingrediente') {
-        const ingredienteSeleccionado = ingredientes.find(
-          (ingrediente) => ingrediente.id === parseInt(value)
-        );
-        if (ingredienteSeleccionado) {
-          updatedPedido.total = ingredienteSeleccionado.precio || 0;
-        }
-      }
-
-      return updatedPedido;
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    fetch('http://localhost/back_s_for_you_nutrition/public/pedidos', {
+    const res = await fetch('http://localhost:8000/api/pedido', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(pedido),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Pedido realizado con éxito:', data);
-      })
-      .catch((error) => {
-        console.error('Error al realizar el pedido:', error);
-      });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pedido)
+    });
+    const data = await res.json();
+    console.log(data);
+    setCarrito([]);
   };
 
   return (
-    <div className="auth-container">
-      <div className="logo-section">
-        <h1>Realizar Pedido</h1>
-        <p>Complete los detalles del pedido a continuación.</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="auth-form">
-        {/* Cliente */}
-        <div>
-          <label>Cliente:</label>
-          <input
-            type="number"
-            name="id_cliente"
-            value={pedido.id_cliente}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Ingrediente */}
-        <div>
-          <label>Ingrediente:</label>
-          <select
-            name="id_ingrediente"
-            value={pedido.id_ingrediente}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un ingrediente</option>
-            {ingredientes.length > 0 ? (
-              ingredientes.map((ingrediente) => (
-                <option key={ingrediente.id} value={ingrediente.id}>
-                  {ingrediente.nombre}
-                </option>
-              ))
-            ) : (
-              <option disabled>Cargando ingredientes...</option>
-            )}
-          </select>
-        </div>
-
-        {/* Tipo de compra */}
-        <div>
-          <label>Tipo de compra:</label>
-          <select
-            name="id_tipo_compra"
-            value={pedido.id_tipo_compra}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un tipo de compra</option>
-            {tiposCompra.length > 0 ? (
-              tiposCompra.map((tipo) => (
-                <option key={tipo.id} value={tipo.id}>
-                  {tipo.nombre}
-                </option>
-              ))
-            ) : (
-              <option disabled>Cargando tipos de compra...</option>
-            )}
-          </select>
-        </div>
-
-        {/* Ubicación de entrega */}
-        {pedido.id_tipo_compra === '2' && (
-          <div>
-            <label>Ubicación de entrega:</label>
-            <input
-              type="text"
-              name="ubicacion_entrega"
-              value={pedido.ubicacion_entrega}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        )}
-
-        {/* Método de pago */}
-        <div>
-          <label>Método de pago:</label>
-          <select
-            name="id_metodo_pago"
-            value={pedido.id_metodo_pago}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un método de pago</option>
-            {metodosPago.length > 0 ? (
-              metodosPago.map((metodo) => (
-                <option key={metodo.id} value={metodo.id}>
-                  {metodo.nombre}
-                </option>
-              ))
-            ) : (
-              <option disabled>Cargando métodos de pago...</option>
-            )}
-          </select>
-        </div>
-
-        {/* Total */}
-        <div>
-          <label>Total:</label>
-          <input
-            type="number"
-            name="total"
-            value={pedido.total}
-            onChange={handleChange}
-            disabled
-          />
-        </div>
-
-        {/* Resumen del pedido */}
-        <div>
-          <h3>Resumen de tu pedido</h3>
-          <p><strong>Ingrediente:</strong> {ingredientes.find(ingrediente => ingrediente.id === parseInt(pedido.id_ingrediente))?.nombre || 'N/A'}</p>
-          <p><strong>Tipo de Compra:</strong> {tiposCompra.find(tipo => tipo.id === parseInt(pedido.id_tipo_compra))?.nombre || 'N/A'}</p>
-          <p><strong>Método de Pago:</strong> {metodosPago.find(metodo => metodo.id === parseInt(pedido.id_metodo_pago))?.nombre || 'N/A'}</p>
-          <p><strong>Total:</strong> ${pedido.total}</p>
-        </div>
-
-        {/* Botón de enviar */}
-        <button type="submit" className="btn-primary">Realizar Pedido</button>
-      </form>
+    <div>
+      <h1>Sistema de Pedidos</h1>
+      <productoForm agregarAlCarrito={agregarAlCarrito} />
+      <carrito carrito={carrito} />
+      <button onClick={enviarPedido}>Enviar Pedido</button>
     </div>
   );
 }
 
-export default Pedido;
+export default App;
 
 
-/*
-import React, { useState, useEffect } from 'react';
-import '../style/register.css';  // Asegúrate de tener este archivo CSS
 
-function Pedido() {
-  const [ingredientes, setIngredientes] = useState([]);
-  const [tiposCompra, setTiposCompra] = useState([]);
-  const [metodosPago, setMetodosPago] = useState([]);
+// import React, { useEffect, useState } from 'react';
+// import '../style/modal.css'; // Asegúrate de crear este archivo para estilos del modal
 
-  // Realizamos las peticiones a las API para obtener los datos
-  useEffect(() => {
-    // Obtener ingredientes desde la API
-    fetch('/api/ingredientes')
-      .then((response) => response.json())
-      .then((data) => setIngredientes(data))
-      .catch((error) => {
-        console.error('Error al obtener los ingredientes:', error);
-      });
+// function ProductosConExtras() {
+//   const [productos, setProductos] = useState([]);
+//   const [ingredientes, setIngredientes] = useState([]);
+//   const [orden, setOrden] = useState([]);
+//   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+//   const [ingredienteSeleccionado, setIngredienteSeleccionado] = useState(null);
+//   const [mostrarModal, setMostrarModal] = useState(false);
 
-    // Obtener tipos de compra desde la API
-    fetch('/api/tiposCompra')
-      .then((response) => response.json())
-      .then((data) => setTiposCompra(data))
-      .catch((error) => {
-        console.error('Error al obtener los tipos de compra:', error);
-      });
+//   useEffect(() => {
+//     fetch('http://localhost/back_your_nutrition/public/productos')
+//       .then(res => res.json())
+//       .then(setProductos);
 
-    // Obtener métodos de pago desde la API
-    fetch('/api/metodosPago')
-      .then((response) => response.json())
-      .then((data) => setMetodosPago(data))
-      .catch((error) => {
-        console.error('Error al obtener los métodos de pago:', error);
-      });
-  }, []);
+//     fetch('http://localhost/back_your_nutrition/public/ingredientes')
+//       .then(res => res.json())
+//       .then(setIngredientes);
+//   }, []);
 
-  return (
-    <div className="auth-container">
-      <div className="logo-section">
-        <h1>Lista de Ingredientes, Tipos de Compra y Métodos de Pago</h1>
-        <p>A continuación se muestran los ingredientes, tipos de compra y métodos de pago disponibles.</p>
-      </div>
+//   const abrirModal = (producto) => {
+//     setProductoSeleccionado(producto);
+//     setIngredienteSeleccionado(null);
+//     setMostrarModal(true);
+//   };
 
-      <div className="ingredientes-list">
-        <h2>Ingredientes:</h2>
-        {ingredientes.length === 0 ? (
-          <p>No hay ingredientes disponibles.</p>
-        ) : (
-          <ul>
-            {ingredientes.map((ingrediente) => (
-              <li key={ingrediente.id}>{ingrediente.nombre}</li>
-            ))}
-          </ul>
-        )}
-      </div>
+//   const agregarProductoAOrden = () => {
+//     setOrden([...orden, { 
+//       productoId: productoSeleccionado.Id, 
+//       ingredienteId: ingredienteSeleccionado || null 
+//     }]);
+//     setMostrarModal(false);
+//   };
 
-      <div className="tipos-compra-list">
-        <h2>Tipos de Compra:</h2>
-        {tiposCompra.length === 0 ? (
-          <p>No hay tipos de compra disponibles.</p>
-        ) : (
-          <ul>
-            {tiposCompra.map((tipo) => (
-              <li key={tipo.id}>{tipo.nombre}</li>
-            ))}
-          </ul>
-        )}
-      </div>
+//   const enviarOrden = () => {
+//     fetch('http://localhost/back_your_nutrition/public/seccionesMenu', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ productos: orden })
+//     })
+//       .then(res => res.json())
+//       .then(() => {
+//         alert('Orden registrada exitosamente');
+//         setOrden([]);
+//       })
+//       .catch(err => console.error(err));
+//   };
 
-      <div className="metodos-pago-list">
-        <h2>Métodos de Pago:</h2>
-        {metodosPago.length === 0 ? (
-          <p>No hay métodos de pago disponibles.</p>
-        ) : (
-          <ul>
-            {metodosPago.map((metodo) => (
-              <li key={metodo.id}>{metodo.nombre}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div style={{ padding: '20px' }}>
+//       <h2>Selecciona tus productos</h2>
+//       {productos.map((prod) => (
+//         <div key={prod.Id} style={{ marginBottom: '20px', borderBottom: '1px solid #ccc' }}>
+//           <h3>{prod.Nombre}</h3>
+//           <p>{prod.Descripcion}</p>
+//           <p>Precio: ${prod.Precio}</p>
+//           <button onClick={() => abrirModal(prod)}>Seleccionar</button>
+//         </div>
+//       ))}
 
-export default Pedido;
+//       <h4>Carrito:</h4>
+//       <ul>
+//         {orden.map((item, idx) => (
+//           <li key={idx}>Producto #{item.productoId} {item.ingredienteId && `(Ingrediente adicional: ${item.ingredienteId})`}</li>
+//         ))}
+//       </ul>
 
-*/ 
+//       <button onClick={enviarOrden} style={{ marginTop: '20px' }}>Enviar Orden</button>
+
+//       {mostrarModal && (
+//         <div className="modal-backdrop">
+//           <div className="modal-content">
+//             <h3>{productoSeleccionado?.Nombre}</h3>
+//             <p>¿Deseas añadir un ingrediente adicional?</p>
+
+//             <select onChange={(e) => setIngredienteSeleccionado(e.target.value)}>
+//               <option value="">Sin adicional</option>
+//               {ingredientes.map((ing) => (
+//                 <option key={ing.Id} value={ing.Id}>{ing.Nombre}</option>
+//               ))}
+//             </select>
+
+//             <div style={{ marginTop: '15px' }}>
+//               <button onClick={agregarProductoAOrden}>Añadir al carrito</button>
+//               <button onClick={() => setMostrarModal(false)} style={{ marginLeft: '10px' }}>Cancelar</button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default ProductosConExtras;
+
+ 

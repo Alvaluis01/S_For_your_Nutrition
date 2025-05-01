@@ -204,3 +204,98 @@
   color: #1A9E53;
 }
 
+
+
+.contenido-principal {
+  text-align: center;
+  padding: 50px;
+}
+
+.opciones-login {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.boton-opcion {
+  background-color: #28a745;
+  color: white;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.boton-opcion:hover {
+  background-color: #218838;
+}
+
+
+.form-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 30px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-container form input,
+.form-container form button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.form-container form button {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+}
+
+.form-container form button:hover {
+  background-color: #218838;
+}
+
+
+
+/* Ejemplo de estilo para el formulario de login */
+.login-container {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
