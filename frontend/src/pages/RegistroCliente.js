@@ -52,7 +52,7 @@ function RegistroPersona() {
 
   return (
     <div className="registro-container">
-      <h2>Registrar Persona</h2>
+      <h2>Registro persona</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="number"

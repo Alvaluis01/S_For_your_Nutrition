@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../style/register.css'; // Estilos personalizados
+import { useNavigate } from 'react-router-dom';
+import '../style/register.css';
 
 function ValidarPersona() {
   const [formData, setFormData] = useState({
@@ -7,36 +8,29 @@ function ValidarPersona() {
     Contraseña: ''
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch('http://localhost/back_your_nutrition/public/personas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert('Persona validada correctamente');
-        // Aquí puedes redirigir o mostrar los datos de la persona
-      } else {
-        alert('Error al validar: ' + (result.error || ''));
-      }
-    } catch (err) {
-      alert('Error al conectar con el servidor');
+    // Puedes cambiar estas contraseñas por valores más seguros o validados desde backend
+    if (formData.Contraseña === 'admin123') {
+      navigate('/PaginaAdmin'); // Redirige a página de administrador
+    } else if (formData.Contraseña === 'cliente123') {
+      navigate('/PaginaCliente'); // Redirige a página de cliente
+    } else {
+      alert('Contraseña incorrecta');
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Validar Persona</h2>
+      <h2>Ingresar</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="number"
@@ -54,7 +48,7 @@ function ValidarPersona() {
           onChange={handleChange}
           required
         />
-        <button type="submit">Validar</button>
+        <button type="submit">Ingresar</button>
       </form>
     </div>
   );

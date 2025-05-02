@@ -1,23 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, createContext, useEffect, useState } from 'react';
 import '../style/styles.css';
 import '../style/products.css';
-
+import { CarritoContext } from './CarritoProvider'; // ya lo estás importando
 import cupavena from '../image/cupave.png';
 import batidoVainilla from '../image/cupvai.png';
 import imagenDefault from '../image/cupave.png';
 import malteada from '../image/malteada.png';
+import { Link } from 'react-router-dom';
+import { useCarrito } from './CarritoProvider';
 
+export const CartContext = createContext([]);
+
+
+export const CarritoProvider = ({ children }) => {
+  const [carrito, setCarrito] = useState([]);
+
+  const agregarAlCarrito = (producto) => {
+    setCarrito([...carrito, producto]);
+  };
+
+  const eliminarDelCarrito = (id) => {
+    setCarrito(carrito.filter(p => p.id !== id));
+  };
+
+  const vaciarCarrito = () => {
+    setCarrito([]);
+  };
+
+  return (
+    <CarritoContext.Provider value={{ carrito, agregarAlCarrito, eliminarDelCarrito, vaciarCarrito }}>
+      {children}
+    </CarritoContext.Provider>
+  );
+};
+ 
 function ProductosList() {
   const [productos, setProductos] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [ingredientesSeleccionados, setIngredientesSeleccionados] = useState([]);
+  const { agregarAlCarrito } = useCarrito();
 
   useEffect(() => {
     fetch('http://localhost/back_your_nutrition/public/productos')
       .then((response) => response.json())
-      .then((data) => {
-        setProductos(data);
-      })
+      .then((data) => setProductos(data))
       .catch((error) => console.error('Error:', error));
   }, []);
 
@@ -37,29 +64,54 @@ function ProductosList() {
 
   const abrirModal = (producto) => {
     setProductoSeleccionado(producto);
+    setIngredientesSeleccionados([]);
     setMostrarModal(true);
   };
 
   const cerrarModal = () => {
-    setMostrarModal(false);
     setProductoSeleccionado(null);
+    setIngredientesSeleccionados([]);
+    setMostrarModal(false);
+  };
+
+  const agregarIngrediente = () => {
+    const nuevo = prompt('Ingresa un ingrediente adicional:');
+    if (nuevo) {
+      setIngredientesSeleccionados(prev => [...prev, nuevo]);
+    }
+  };
+
+  const confirmarYAgregar = () => {
+    const productoConIngredientes = {
+      ...productoSeleccionado,
+      ingredientes: ingredientesSeleccionados,
+    };
+    agregarAlCarrito(productoConIngredientes);
+    cerrarModal();
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Nuestros productos</h2>
+    <div>
+      <nav className="menu-cliente">
+        <div className="logo">
+          <h2>S´ FOR YOUR NUTRITION</h2>
+        </div>
+        <ul className="menu-links">
+          <li><Link to="/productos">Productos</Link></li>
+          <li><Link to="/comprar">Ordenar</Link></li>
+          <li><Link to="/carrito">Carrito</Link></li>
+          <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>
+        </ul>
+      </nav>
 
+      <h2 style={{ textAlign: 'center' }}>Nuestros productos</h2>
       <div className="productos-grid">
         {productos.length === 0 ? (
           <p>No hay productos disponibles.</p>
         ) : (
-          productos.map((producto) => (
+          productos.map(producto => (
             <div key={producto.Id} className="producto-card" onClick={() => abrirModal(producto)}>
-              <img 
-                src={obtenerImagenProducto(producto.Nombre)} 
-                alt={producto.Nombre} 
-                className="producto-imagen" 
-              />
+              <img src={obtenerImagenProducto(producto.Nombre)} alt={producto.Nombre} className="producto-imagen" />
               <div className="producto-info">
                 <h3>{producto.Nombre}</h3>
                 <p><strong>Precio:</strong> ${producto.Precio}</p>
@@ -69,21 +121,19 @@ function ProductosList() {
         )}
       </div>
 
-      {/* Modal */}
       {mostrarModal && productoSeleccionado && (
         <div className="modal-overlay" onClick={cerrarModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="modal-cerrar" onClick={cerrarModal}>X</button>
-            <img 
-              src={obtenerImagenProducto(productoSeleccionado.Nombre)} 
-              alt={productoSeleccionado.Nombre} 
-              className="modal-imagen"
-            />
+            <img src={obtenerImagenProducto(productoSeleccionado.Nombre)} alt={productoSeleccionado.Nombre} className="modal-imagen" />
             <h3>{productoSeleccionado.Nombre}</h3>
             <p><strong>Precio:</strong> ${productoSeleccionado.Precio}</p>
             <p><strong>Descripción:</strong> {productoSeleccionado.Descripcion}</p>
             <p><strong>Tamaño:</strong> {productoSeleccionado.Tamaño} g</p>
             <p><strong>Calorías:</strong> {productoSeleccionado.Calorias} kcal</p>
+            <p><strong>Ingredientes adicionales:</strong> {ingredientesSeleccionados.join(', ') || 'Ninguno'}</p>
+            <button onClick={agregarIngrediente}>Agregar ingrediente adicional</button>
+            <button onClick={confirmarYAgregar}>Añadir al carrito</button>
           </div>
         </div>
       )}

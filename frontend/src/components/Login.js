@@ -10,13 +10,13 @@ function Login() {
   };
 
   const goToAdministrativo = () => {
-    navigate('/admin');
+    navigate('/ingresar');
   };
 
   return (
     <div className="auth-container">
       <div className="logo-section">
-        <h1>STAY FIT</h1>
+        <h1>S´ FOR YOUR NUTRITION</h1>
         <p>BATIDOS</p>
       </div>
       <h2>¡Conéctate!</h2>

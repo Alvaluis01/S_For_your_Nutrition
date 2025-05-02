@@ -19,6 +19,25 @@ class PersonaController extends Controller
         return response()->json($persona, 201); // Retornar la nueva persona creada
     }
 
+    //validar por documento y contraseña
+    public function validar(Request $request)
+{
+    $documento = $request->input('Documento');
+    $contraseña = $request->input('Contraseña');
+
+    $persona = Persona::where('Documento', $documento)
+                      ->where('Contraseña', $contraseña)
+                      ->first();
+
+    if ($persona) {
+        return response()->json($persona);
+    } else {
+        return response()->json(['error' => 'Credenciales incorrectas'], 401);
+    }
+}
+
+
+
     public function show($id)
     {
     $persona = Persona::find($id);
@@ -27,6 +46,7 @@ class PersonaController extends Controller
     }
     return response()->json($persona);
     }
+
 
     public function update(Request $request, $id)
     {

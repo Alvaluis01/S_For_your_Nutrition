@@ -16,6 +16,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+$router->post('/validar-persona', 'PersonaController@validar');
+$router->options('{any:.*}', function () {
+    return response('', 200);
+});
+
 
 $router->get('/clientes', 'ClienteController@index');
 

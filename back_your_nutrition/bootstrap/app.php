@@ -19,13 +19,39 @@ date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 |
 */
 
+
+$app->withFacades();
+
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
-
 $app->withEloquent();
+
+$app->configure('cors'); // <-- Aquí
+
+$router->options('{any:.*}', function () {
+    return response()->json([], 200);
+});
+
+
+
+$app->middleware([
+    Fruitcake\Cors\HandleCors::class,  // Asegúrate de incluir esta línea
+]);
+
+
+
+
+$app->singleton(
+    Illuminate\Contracts\Console\Kernel::class,
+    App\Console\Kernel::class
+);
+
+$app->singleton(
+    Illuminate\Contracts\Debug\ExceptionHandler::class,
+    App\Exceptions\Handler::class
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -72,11 +98,9 @@ $app->configure('app');
 |
 */
 
-$app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-    App\Http\Middleware\CorsMiddleware::class
+$app->register(App\Providers\ConsoleServiceProvider::class);
 
-]);
+
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
