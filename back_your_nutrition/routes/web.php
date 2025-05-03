@@ -13,14 +13,14 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
-$router->post('/validar-persona', 'PersonaController@validar');
 $router->options('{any:.*}', function () {
     return response('', 200);
 });
 
+
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
 
 $router->get('/clientes', 'ClienteController@index');
 
@@ -29,6 +29,8 @@ $router->post('/clientes', 'ClienteController@store');
 $router->put('/clientes/{id}', 'ClienteController@update');
 $router->delete('/clientes/{id}', 'ClienteController@destroy');
 
+$router->get('/login', 'PersonaController@login'); 
+$router->post('/login', 'PersonaController@login');
 $router->get('/personas', 'PersonaController@index');
 $router->post('/personas', 'PersonaController@store');
 $router->get('/personas/{id}', 'PersonaController@show');

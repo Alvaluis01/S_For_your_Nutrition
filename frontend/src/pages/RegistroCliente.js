@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import '../style/register.css'; // Estilos personalizados
 
 function RegistroPersona() {
@@ -13,6 +14,8 @@ function RegistroPersona() {
     Contraseña: ''
   });
 
+  const navigate = useNavigate(); // Inicializar useNavigate
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -22,7 +25,7 @@ function RegistroPersona() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost/back_your_nutrition/public/personas', {
+      const response = await fetch('http://localhost:8000/personas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -31,6 +34,7 @@ function RegistroPersona() {
       const result = await response.json();
       if (response.ok) {
         alert('Persona registrada correctamente');
+        
         // Limpiar el formulario después de registrar
         setFormData({
           Documento: '',
@@ -42,6 +46,9 @@ function RegistroPersona() {
           Id_ciudad: '',
           Contraseña: ''
         });
+
+        // Redirigir a la página de ingreso (login)
+        navigate('/ingresar'); // Ajusta la ruta según tu configuración de rutas
       } else {
         alert('Error al registrar: ' + (result.error || ''));
       }

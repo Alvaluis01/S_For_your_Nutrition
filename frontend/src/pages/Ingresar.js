@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 
 function ValidarPersona() {
+  // ✅ Hooks siempre deben ir al inicio
   const [formData, setFormData] = useState({
     Documento: '',
     Contraseña: ''
@@ -10,21 +11,38 @@ function ValidarPersona() {
 
   const navigate = useNavigate();
 
+  // ✅ Manejador de cambio en inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  // ✅ Manejador de envío del formulario
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Puedes cambiar estas contraseñas por valores más seguros o validados desde backend
-    if (formData.Contraseña === 'admin123') {
-      navigate('/PaginaAdmin'); // Redirige a página de administrador
-    } else if (formData.Contraseña === 'cliente123') {
-      navigate('/PaginaCliente'); // Redirige a página de cliente
-    } else {
-      alert('Contraseña incorrecta');
+    try {
+      const response = await fetch('http://localhost:8000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert(result.error || 'Error de validación');
+        return;
+      }
+
+      // ✅ Guardar documento y redirigir
+      localStorage.setItem('clienteDocumento', formData.Documento);
+      alert('Inicio de sesión exitoso');
+      navigate('/PaginaCliente');
+
+    } catch (error) {
+      alert('Error al conectar con el servidor');
+      console.error(error);
     }
   };
 

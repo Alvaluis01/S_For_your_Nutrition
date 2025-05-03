@@ -7,37 +7,56 @@ use Illuminate\Http\Request;
 
 class PersonaController extends Controller
 {
+    public function store(Request $request)
+{
+    $persona = new Persona();
+    $persona->Documento = $request->Documento;
+    $persona->Nombres = $request->Nombres;
+    $persona->Apellidos = $request->Apellidos;
+    $persona->Telefono = $request->Telefono;
+    $persona->Email = $request->Email;
+    $persona->Direccion = $request->Direccion;
+    $persona->Id_ciudad = $request->Id_ciudad;
+    $persona->Contraseña = $request->Contraseña;
+    $persona->save();
+
+    return response()->json(['message' => 'Persona registrada correctamente'], 201);
+}
+
     public function index()
     {
         return Persona::all(); // Obtener todas las personas
     }
 
-    public function store(Request $request)
-    {
+    // public function store(Request $request)
+    // {
         
-        $persona = Persona::create($request->all());
-        return response()->json($persona, 201); // Retornar la nueva persona creada
-    }
+    //     $persona = Persona::create($request->all());
+    //     return response()->json($persona, 201); // Retornar la nueva persona creada
+    // }
 
-    //validar por documento y contraseña
-    public function validar(Request $request)
+    public function login(Request $request)
 {
-    $documento = $request->input('Documento');
-    $contraseña = $request->input('Contraseña');
+    $this->validate($request, [
+        'Documento' => 'required',
+        'Contraseña' => 'required',
+    ]);
+    
 
-    $persona = Persona::where('Documento', $documento)
-                      ->where('Contraseña', $contraseña)
-                      ->first();
+    $persona = Persona::where('Documento', $request->Documento)->first();
 
-    if ($persona) {
-        return response()->json($persona);
-    } else {
-        return response()->json(['error' => 'Credenciales incorrectas'], 401);
+    if (!$persona) {
+        return response()->json(['error' => 'Documento no encontrado'], 404);
     }
+
+    if ($persona->Contraseña !== $request->Contraseña) {
+        return response()->json(['error' => 'Contraseña incorrecta'], 401);
+    }
+
+    return response()->json(['message' => 'Inicio de sesión exitoso']);
 }
 
-
-
+    
     public function show($id)
     {
     $persona = Persona::find($id);
@@ -46,7 +65,6 @@ class PersonaController extends Controller
     }
     return response()->json($persona);
     }
-
 
     public function update(Request $request, $id)
     {

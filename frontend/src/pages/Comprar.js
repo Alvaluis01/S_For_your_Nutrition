@@ -6,28 +6,35 @@ import cupavena from '../image/cupave.png';
 import batidoVainilla from '../image/cupvai.png';
 import imagenDefault from '../image/cupave.png';
 import malteada from '../image/malteada.png';
-import { Link } from 'react-router-dom'; // Usar Link para navegación
-
+import { Link } from 'react-router-dom';
 
 function ProductosList() {
+  const documentoCliente = localStorage.getItem('clienteDocumento');
+
   const [productos, setProductos] = useState([]);
+  const [ingredientesDisponibles, setIngredientesDisponibles] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [ingredientesAdicionales, setIngredientesAdicionales] = useState([]);
   const [carrito, setCarrito] = useState([]);
-
-  const producto = {
-    nombre: 'Ejemplo',
-    precio: 10,
-    ingredientes: ['avena', 'canela']
-  };
-
+  useEffect(() => {
+    if (!documentoCliente) {
+      alert('Por favor, inicia sesión para ver los productos');
+      // Redirigir si usas React Router:
+      // navigate('/login');
+    }
+  }, []);
+  
   useEffect(() => {
     fetch('http://localhost/back_your_nutrition/public/productos')
       .then((response) => response.json())
-      .then((data) => {
-        setProductos(data);
-      })
-      .catch((error) => console.error('Error:', error));
+      .then((data) => setProductos(data))
+      .catch((error) => console.error('Error productos:', error));
+
+    fetch('http://localhost/back_your_nutrition/public/ingredientes')
+      .then((response) => response.json())
+      .then((data) => setIngredientesDisponibles(data))
+      .catch((error) => console.error('Error ingredientes:', error));
   }, []);
 
   const obtenerImagenProducto = (nombreProducto) => {
@@ -46,51 +53,38 @@ function ProductosList() {
 
   const abrirModal = (producto) => {
     setProductoSeleccionado(producto);
+    setIngredientesAdicionales([]);
     setMostrarModal(true);
   };
 
   const cerrarModal = () => {
     setMostrarModal(false);
     setProductoSeleccionado(null);
+    setIngredientesAdicionales([]);
   };
 
-  const agregarAlCarrito = (producto) => {
-    setCarrito([...carrito, producto]);
-    setMostrarModal(false);
-  };
-
-  const agregarIngredienteAdicional = () => {
-    const ingrediente = prompt("¿Qué ingrediente adicional te gustaría agregar?");
-    if (ingrediente) {
-      const productoConIngrediente = {
-        ...productoSeleccionado,
-        IngredienteAdicional: ingrediente,
-      };
-      setCarrito([...carrito, productoConIngrediente]);
-    }
-    setMostrarModal(false);
+  const agregarAlCarrito = () => {
+    const productoConIngredientes = {
+      ...productoSeleccionado,
+      IngredientesAdicionales: [...ingredientesAdicionales],
+    };
+    setCarrito([...carrito, productoConIngredientes]);
+    cerrarModal();
   };
 
   return (
-
-    
     <div>
-      
-      
       <nav className="menu-cliente">
-        
-          <div className="logo">
-            <h2>S´ FOR YOUR NUTRITION</h2>
-          </div>
-          <ul className="menu-links">
-            <li><Link to="/productos">Productos</Link></li>
-            <li><Link to="/comprar">Ordenar</Link></li>
-            <li><Link to="/carrito">Carrito</Link></li>
-            <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>
-          </ul>
-        
+        <div className="logo">
+          <h2>S´ FOR YOUR NUTRITION</h2>
+        </div>
+        <ul className="menu-links">
+          <li><Link to="/productos">Productos</Link></li>
+          <li><Link to="/comprar">Ordenar</Link></li>
+          <li><Link to="/carrito">Carrito</Link></li>
+          <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>
+        </ul>
       </nav>
-    
 
       <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Nuestros productos</h2>
 
@@ -114,7 +108,6 @@ function ProductosList() {
         )}
       </div>
 
-      {/* Modal */}
       {mostrarModal && productoSeleccionado && (
         <div className="modal-overlay" onClick={cerrarModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -130,25 +123,38 @@ function ProductosList() {
             <p><strong>Tamaño:</strong> {productoSeleccionado.Tamaño} g</p>
             <p><strong>Calorías:</strong> {productoSeleccionado.Calorias} kcal</p>
 
-            {/* Botones para agregar al carrito o agregar ingredientes */}
-            <div>
-            <div>
-              <h2>Ordenar productos</h2>
-                <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button>
-            </div>
-            <div>
-              <button onClick={agregarIngredienteAdicional}>
-                  Agregar ingrediente adicional
+            <div style={{ marginTop: '20px' }}>
+              <h4>Seleccionar ingredientes adicionales</h4>
+              <div className="checklist-container">
+                {ingredientesDisponibles.map((ingrediente) => (
+                  <label key={ingrediente.Id} className="checklist-item">
+                    <input
+                      type="checkbox"
+                      value={ingrediente.Nombre}
+                      checked={ingredientesAdicionales.includes(ingrediente.Nombre)}
+                      onChange={(e) => {
+                        const seleccionado = e.target.checked;
+                        if (seleccionado) {
+                          setIngredientesAdicionales([...ingredientesAdicionales, ingrediente.Nombre]);
+                        } else {
+                          setIngredientesAdicionales(
+                            ingredientesAdicionales.filter((ing) => ing !== ingrediente.Nombre)
+                          );
+                        }
+                      }}
+                    />
+                    {ingrediente.Nombre}
+                  </label>
+                ))}
+              </div>
+              <button style={{ marginTop: '15px' }} onClick={agregarAlCarrito}>
+                Agregar al carrito
               </button>
-            </div>
-
-              
             </div>
           </div>
         </div>
       )}
 
-      {/* Mostrar carrito */}
       <div className="carrito">
         <h3>Carrito de compras</h3>
         {carrito.length === 0 ? (
@@ -158,8 +164,8 @@ function ProductosList() {
             {carrito.map((item, index) => (
               <li key={index}>
                 {item.Nombre} - ${item.Precio}
-                {item.IngredienteAdicional && (
-                  <p><strong>Ingrediente Adicional:</strong> {item.IngredienteAdicional}</p>
+                {item.IngredientesAdicionales && item.IngredientesAdicionales.length > 0 && (
+                  <p><strong>Ingredientes Adicionales:</strong> {item.IngredientesAdicionales.join(', ')}</p>
                 )}
               </li>
             ))}

@@ -1,29 +1,41 @@
-<?hh
+<?php
 
 namespace FastRoute\TestFixtures;
 
-function all_options_simple(): \FastRoute\Dispatcher {
+use FastRoute\Dispatcher;
+use FastRoute\RouteParser\Std as RouteParserStd;
+use FastRoute\DataGenerator\GroupCountBased as DataGeneratorGroupCountBased;
+use FastRoute\Dispatcher\GroupCountBased as DispatcherGroupCountBased;
+use FastRoute\RouteCollector;
+
+function all_options_simple(): Dispatcher
+{
     return \FastRoute\simpleDispatcher(
-      $collector ==> {},
-      shape(
-        'routeParser' => \FastRoute\RouteParser\Std::class,
-        'dataGenerator' => \FastRoute\DataGenerator\GroupCountBased::class,
-        'dispatcher' => \FastRoute\Dispatcher\GroupCountBased::class,
-        'routeCollector' => \FastRoute\RouteCollector::class,
-      ),
+        function (RouteCollector $collector) {
+            // Puedes agregar rutas aquí si quieres
+        },
+        [
+            'routeParser' => RouteParserStd::class,
+            'dataGenerator' => DataGeneratorGroupCountBased::class,
+            'dispatcher' => DispatcherGroupCountBased::class,
+            'routeCollector' => RouteCollector::class,
+        ]
     );
 }
 
-function all_options_cached(): \FastRoute\Dispatcher {
+function all_options_cached(): Dispatcher
+{
     return \FastRoute\cachedDispatcher(
-      $collector ==> {},
-      shape(
-        'routeParser' => \FastRoute\RouteParser\Std::class,
-        'dataGenerator' => \FastRoute\DataGenerator\GroupCountBased::class,
-        'dispatcher' => \FastRoute\Dispatcher\GroupCountBased::class,
-        'routeCollector' => \FastRoute\RouteCollector::class,
-        'cacheFile' => '/dev/null',
-        'cacheDisabled' => false,
-      ),
+        function (RouteCollector $collector) {
+            // Puedes agregar rutas aquí si quieres
+        },
+        [
+            'routeParser' => RouteParserStd::class,
+            'dataGenerator' => DataGeneratorGroupCountBased::class,
+            'dispatcher' => DispatcherGroupCountBased::class,
+            'routeCollector' => RouteCollector::class,
+            'cacheFile' => '/dev/null', // o la ruta que quieras para tu cache
+            'cacheDisabled' => false,
+        ]
     );
 }

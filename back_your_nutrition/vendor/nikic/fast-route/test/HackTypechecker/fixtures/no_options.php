@@ -1,11 +1,24 @@
-<?hh
+<?php
 
 namespace FastRoute\TestFixtures;
 
-function no_options_simple(): \FastRoute\Dispatcher {
-    return \FastRoute\simpleDispatcher($collector ==> {});
+use FastRoute\Dispatcher;
+use FastRoute\RouteCollector;
+
+function no_options_simple(): Dispatcher
+{
+    return \FastRoute\simpleDispatcher(
+        function (RouteCollector $collector) {
+            // No se agregan rutas aquí
+        }
+    );
 }
 
-function no_options_cached(): \FastRoute\Dispatcher {
-    return \FastRoute\cachedDispatcher($collector ==> {});
+function no_options_cached(): Dispatcher
+{
+    return \FastRoute\cachedDispatcher(
+        function (RouteCollector $collector) {
+            // No se agregan rutas aquí
+        }
+    );
 }

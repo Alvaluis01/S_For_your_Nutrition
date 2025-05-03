@@ -1,50 +1,93 @@
 
-import { useCarrito } from './CarritoProvider';
-import { Link } from 'react-router-dom';
-import React, { useContext } from 'react';
-import { CarritoContext } from './CarritoProvider'; // Ajusta la ruta si es necesario
+import {useNavigate  } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
+function Carrito() {
+  const [carrito, setCarrito] = useState([]);
+  const [cliente, setPersona] = useState(null); // Asegúrate de obtener el cliente en la sesión actual
+  const documentoCliente = localStorage.getItem('clienteDocumento');
 
-const Carrito = () => {
-    const { carrito, eliminarDelCarrito, vaciarCarrito } = useContext(CarritoContext);
-    const total = carrito.reduce((sum, item) => sum + item.precio, 0);
+  useEffect(() => {
+    if (!documentoCliente) {
+      alert('Por favor, inicia sesión para ver los productos');
+      // Redirigir si usas React Router:
+      // navigate('/login');
+    }
+  }, []);
+  useEffect(() => {
+    const carritoGuardado = JSON.parse(localStorage.getItem('carrito'));
+    if (carritoGuardado) setCarrito(carritoGuardado);
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+  }, [carrito]);
+  
+  
+  const enviarPedido = () => {
+    const pedido = {
+      cliente_documento: documentoCliente,
+      fecha: new Date().toISOString().split('T')[0], // Formato: YYYY-MM-DD
+      estado: 'pendiente',
+      tipo_compra: 'domicilio',
+      ubicacion: 'direccion de prueba',
+      total: carrito.reduce((acc, item) => acc + parseFloat(item.Precio), 0),
+      metodo_pago: 'efectivo',
+      productos: carrito.map((item) => ({
+        producto_id: item.Id,
+        ingredientes_adicionales: item.IngredientesAdicionales
+      }))
+    };
+  
+    fetch('http://localhost/back_your_nutrition/public/registrar-pedido', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(pedido)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Pedido registrado:', data);
+        setCarrito([]); // Limpia el carrito después del envío
+        alert('¡Pedido enviado correctamente!');
+      })
+      .catch(error => {
+        console.error('Error al enviar el pedido:', error);
+      });
+  };
+  
+  const handleCheckout = async () => {
+    if (cliente) {
+      const response = await fetch('http://localhost/back_your_nutrition/public/pedidos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          Id_cliente: cliente.Id,
+          // Aquí va más información sobre el pedido (estado, fecha, etc.)
+        })
+      });
+      
+      if (response.ok) {
+        alert('Pedido realizado correctamente');
+      } else {
+        alert('Error al realizar el pedido');
+      }
+    } else {
+      alert('Debes estar logueado para realizar un pedido');
+    }
+  };
+
   return (
     <div>
-      <nav className="menu-cliente">
-        <div className="contenido-cliente">
-          <div className="logo">
-            <h2>S´ FOR YOUR NUTRITION</h2>
-          </div>
-          <ul className="menu-links">
-            <li><Link to="/productos">Productos</Link></li>
-            <li><Link to="/comprar">Ordenar</Link></li>
-            <li><Link to="/carrito">Carrito</Link></li>
-            <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>
-          </ul>
-        </div>
-      </nav>
+      {carrito.length > 0 && (
+  <button onClick={enviarPedido} style={{ marginTop: '20px' }}>
+    Confirmar pedido
+  </button>
+)}
 
-      <div>
-      <h2>Carrito</h2>
-      {carrito.length === 0 ? (
-        <p>El carrito está vacío</p>
-      ) : (
-        <>
-          <ul>
-            {carrito.map((item, index) => (
-              <li key={index}>
-                {item.nombre} - ${item.precio}
-                <button onClick={() => eliminarDelCarrito(item.id)}>Eliminar</button>
-              </li>
-            ))}
-          </ul>
-          <p>Total: ${total}</p>
-          <button onClick={vaciarCarrito}>Vaciar carrito</button>
-        </>
-      )}
-    </div>
     </div>
   );
-};
+}
 
 export default Carrito;

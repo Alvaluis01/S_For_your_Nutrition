@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of Class Preloader.
  *
- * (c) Graham Campbell <hello@gjcampbell.co.uk>
+ * (c) Graham Campbell <graham@alt-three.com>
  * (c) Michael Dowling <mtdowling@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -107,7 +107,6 @@ final class ClassLoader
      */
     public function loadClass(string $class)
     {
-        /** @var list<callable(string): bool> */
         $funcs = spl_autoload_functions();
 
         if ($funcs !== false) {
