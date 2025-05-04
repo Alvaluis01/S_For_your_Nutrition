@@ -4,7 +4,7 @@ import '../style/register.css';
 
 function ValidarPersona() {
   const [formData, setFormData] = useState({
-    Documento: '',
+    Nombres: '',       // Cambiado de "Documento" a "Nombres"
     Contraseña: ''
   });
 
@@ -18,33 +18,39 @@ function ValidarPersona() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`http://localhost:8000/personas/${formData.Documento}`);
-    const persona = await response.json();
+    // Cambio en la lógica: ahora buscamos por "Nombres" en lugar de "Documento"
+    const response = await fetch(`http://localhost:8000/personas?Nombres=${formData.Nombres}`);
+    const personas = await response.json();
 
-    if (persona && persona.Contraseña === formData.Contraseña) {
-      // Verificar si es cliente o administrador
-      const clienteResponse = await fetch(`http://localhost:8000/personas/${persona.Id}`);
+    // Verificar si existe un usuario con esos nombres y contraseña
+    const personaValida = personas.find(
+      (persona) => persona.Nombres === formData.Nombres && persona.Contraseña === formData.Contraseña
+    );
+
+    if (personaValida) {
+      // Verificar rol (cliente o administrador)
+      const clienteResponse = await fetch(`http://localhost:8000/personas/${personaValida.Id}`);
       const cliente = await clienteResponse.json();
 
       if (cliente) {
-        navigate('/PaginaCliente'); // Redirige a página de cliente
+        navigate('/PaginaCliente'); 
       } else {
-        navigate('/PaginaAdmin'); // Redirige a página de administrador
+        navigate('/PaginaAdmin'); 
       }
     } else {
-      alert('Documento o contraseña incorrectos');
+      alert('Nombres o contraseña incorrectos');
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Ingresar</h2>
+      <h2>Iniciar Sesión</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="number"
-          name="Documento"
-          placeholder="Documento"
-          value={formData.Documento}
+          type="text"           // Cambiado de "number" a "text"
+          name="Usuario"
+          placeholder="Usuario" // Cambiado de "Documento" a "Usuario"
+          value={formData.Nombres}
           onChange={handleChange}
           required
         />

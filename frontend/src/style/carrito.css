@@ -1,0 +1,199 @@
+.carrito-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.carrito-vacio {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.carrito-vacio p {
+  margin-bottom: 20px;
+}
+
+.btn-comprar {
+  background: #1976d2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.items-carrito {
+  margin-bottom: 30px;
+}
+
+.item-carrito {
+  display: flex;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  gap: 20px;
+}
+
+.item-imagen-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-imagen {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.contador-cantidad {
+  display: flex;
+  align-items: center;
+}
+
+.btn-cantidad {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-cantidad:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cantidad {
+  margin: 0 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.item-info {
+  flex-grow: 1;
+}
+
+.ingredientes-seleccionados {
+  margin: 10px 0;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.ingredientes-seleccionados ul {
+  margin: 5px 0 0 0;
+  padding-left: 20px;
+}
+
+.controles-item {
+  display: flex;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.btn-modificar {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-eliminar {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edicion-ingredientes {
+  margin: 15px 0;
+}
+
+.lista-ingredientes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.ingrediente-option {
+  background: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.acciones-edicion {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-guardar {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  background: #f0f0f0;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.resumen-carrito {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.acciones-carrito {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-vaciar {
+  background: #ff4444;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-finalizar {
+  background: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.subtotal {
+  font-weight: bold;
+  margin-top: 10px;
+}

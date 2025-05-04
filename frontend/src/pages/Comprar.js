@@ -1,53 +1,55 @@
+// src/pages/Comprar.js
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useCarrito } from '../context/CarritoContext';
 import '../style/styles.css';
 import '../style/products.css';
 
+// Importa tus imágenes
 import cupavena from '../image/cupave.png';
 import batidoVainilla from '../image/cupvai.png';
 import imagenDefault from '../image/cupave.png';
 import malteada from '../image/malteada.png';
-import { Link } from 'react-router-dom';
-import { CarritoContext, useCarrito } from '../context/CarritoContext';
 
-function ProductosList() {
+function Comprar() {
   const documentoCliente = localStorage.getItem('clienteDocumento');
   const [productos, setProductos] = useState([]);
   const [ingredientesDisponibles, setIngredientesDisponibles] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ingredientesAdicionales, setIngredientesAdicionales] = useState([]);
-  const { agregarAlCarrito } = useCarrito();  // Ahora usamos el contexto
+  
+  // Usa el hook useCarrito correctamente
+  const { agregarAlCarrito } = useCarrito();
 
   useEffect(() => {
     if (!documentoCliente) {
       alert('Por favor, inicia sesión para ver los productos');
-      // Aquí puedes redirigir a login si lo deseas.
+      // Redirigir a login si lo deseas
     }
   }, [documentoCliente]);
 
   useEffect(() => {
+    // Carga productos
     fetch('http://localhost/back_your_nutrition/public/productos')
-      .then((response) => response.json())
-      .then((data) => setProductos(data))
-      .catch((error) => console.error('Error productos:', error));
+      .then(response => response.json())
+      .then(data => setProductos(data))
+      .catch(error => console.error('Error productos:', error));
 
+    // Carga ingredientes
     fetch('http://localhost/back_your_nutrition/public/ingredientes')
-      .then((response) => response.json())
-      .then((data) => setIngredientesDisponibles(data))
-      .catch((error) => console.error('Error ingredientes:', error));
+      .then(response => response.json())
+      .then(data => setIngredientesDisponibles(data))
+      .catch(error => console.error('Error ingredientes:', error));
   }, []);
 
   const obtenerImagenProducto = (nombreProducto) => {
     const nombre = nombreProducto?.toLowerCase() || '';
     switch (nombre) {
-      case 'cupcake de avena':
-        return cupavena;
-      case 'malteada':
-        return malteada;
-      case 'cupcake de vainilla':
-        return batidoVainilla;
-      default:
-        return imagenDefault;
+      case 'cupcake de avena': return cupavena;
+      case 'malteada': return malteada;
+      case 'cupcake de vainilla': return batidoVainilla;
+      default: return imagenDefault;
     }
   };
 
@@ -63,18 +65,24 @@ function ProductosList() {
     setIngredientesAdicionales([]);
   };
 
-  // Agrega el producto al carrito usando el contexto
   const agregarProducto = () => {
-    const productoConIngredientes = {
+    if (!productoSeleccionado) return;
+    
+    const productoParaCarrito = {
       ...productoSeleccionado,
-      IngredientesAdicionales: [...ingredientesAdicionales],
+      id: Date.now(), // ID único
+      ingredientesAdicionales: [...ingredientesAdicionales],
+      cantidad: 1,
+      precio: productoSeleccionado.Precio,
+      imagen: obtenerImagenProducto(productoSeleccionado.Nombre) // Añade la imagen
     };
-    agregarAlCarrito(productoConIngredientes);
+    
+    agregarAlCarrito(productoParaCarrito);
     cerrarModal();
   };
 
   return (
-    <div>
+    <div className="comprar-container">
       <nav className="menu-cliente">
         <div className="logo">
           <h2>S´ FOR YOUR NUTRITION</h2>
@@ -87,14 +95,18 @@ function ProductosList() {
         </ul>
       </nav>
 
-      <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Nuestros productos</h2>
+      <h2 className="titulo-productos">Nuestros productos</h2>
 
       <div className="productos-grid">
         {productos.length === 0 ? (
-          <p>No hay productos disponibles.</p>
+          <p>Cargando productos...</p>
         ) : (
           productos.map((producto) => (
-            <div key={producto.Id} className="producto-card" onClick={() => abrirModal(producto)}>
+            <div 
+              key={producto.Id} 
+              className="producto-card" 
+              onClick={() => abrirModal(producto)}
+            >
               <img 
                 src={obtenerImagenProducto(producto.Nombre)} 
                 alt={producto.Nombre} 
@@ -121,48 +133,40 @@ function ProductosList() {
             <h3>{productoSeleccionado.Nombre}</h3>
             <p><strong>Precio:</strong> ${productoSeleccionado.Precio}</p>
             <p><strong>Descripción:</strong> {productoSeleccionado.Descripcion}</p>
-            <p><strong>Tamaño:</strong> {productoSeleccionado.Tamaño} g</p>
-            <p><strong>Calorías:</strong> {productoSeleccionado.Calorias} kcal</p>
 
-            <div style={{ marginTop: '20px' }}>
-              <h4>Seleccionar ingredientes adicionales</h4>
-              <div className="checklist-container">
-                {ingredientesDisponibles.map((ingrediente) => (
-                  <label key={ingrediente.Id} className="checklist-item">
-                    <input
-                      type="checkbox"
-                      value={ingrediente.Nombre}
-                      checked={ingredientesAdicionales.includes(ingrediente.Nombre)}
-                      onChange={(e) => {
-                        const seleccionado = e.target.checked;
-                        if (seleccionado) {
-                          setIngredientesAdicionales([...ingredientesAdicionales, ingrediente.Nombre]);
-                        } else {
-                          setIngredientesAdicionales(
-                            ingredientesAdicionales.filter((ing) => ing !== ingrediente.Nombre)
-                          );
-                        }
-                      }}
-                    />
-                    {ingrediente.Nombre}
-                  </label>
-                ))}
-              </div>
-              <button style={{ marginTop: '15px' }} onClick={agregarProducto}>
-                Agregar al carrito
-              </button>
+            <div className="ingredientes-adicionales">
+              <h4>Ingredientes adicionales</h4>
+              {ingredientesDisponibles.map((ingrediente) => (
+                <label key={ingrediente.Id} className="ingrediente-option">
+                  <input
+                    type="checkbox"
+                    checked={ingredientesAdicionales.includes(ingrediente.Nombre)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setIngredientesAdicionales([...ingredientesAdicionales, ingrediente.Nombre]);
+                      } else {
+                        setIngredientesAdicionales(
+                          ingredientesAdicionales.filter(ing => ing !== ingrediente.Nombre)
+                        );
+                      }
+                    }}
+                  />
+                  {ingrediente.Nombre}
+                </label>
+              ))}
             </div>
+
+            <button 
+              className="btn-agregar-carrito"
+              onClick={agregarProducto}
+            >
+              Agregar al carrito
+            </button>
           </div>
         </div>
       )}
-
-      {/* Mostramos solo una vista resumida del carrito aquí (opcional) */}
-      <div className="carrito">
-        <h3>Carrito de compras</h3>
-        {/** Si deseas mostrar el contenido del carrito acá, podrías hacerlo leyendo del contexto */}
-      </div>
     </div>
   );
 }
 
-export default ProductosList;
+export default Comprar;
