@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Menu from './components/Menu';
 import Acerca from './pages/Acerca';
 import Contacto from './pages/Contacto';
-import Ubicacion from './pages/Ubicacion';
 import Login from './components/Login';
 import Cliente from './components/Cliente';
 import Admin from './components/Admin';
@@ -50,7 +49,6 @@ return (
           <Route path="/" element={<ProductList />} />
           <Route path="/acerca" element={<Acerca />} />
           <Route path="/contacto" element={<Contacto />} />
-          <Route path="/ubicacion" element={<Ubicacion />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registrar" element={<Registrar />} />
           <Route path="/ingresar" element={<Ingresar />} />

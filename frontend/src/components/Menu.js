@@ -16,7 +16,6 @@ function Menu() {
       <Link to="/">Inicio</Link>
       <Link to="/acerca">Acerca de nosotros</Link>
       <Link to="/contacto">Contactanos</Link>
-      <Link to="/ubicacion">Ubicación</Link>
       <Link to="/login">Iniciar sesión</Link>
     </nav>
   );
