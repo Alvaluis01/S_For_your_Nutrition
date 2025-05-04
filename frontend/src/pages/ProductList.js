@@ -1,45 +1,21 @@
-import React, { useContext, createContext, useEffect, useState } from 'react';
+// src/pages/ProductosList.js
+import React, { useEffect, useState } from 'react';
 import '../style/styles.css';
 import '../style/products.css';
-import { CarritoContext } from './CarritoProvider'; // ya lo estás importando
+
 import cupavena from '../image/cupave.png';
 import batidoVainilla from '../image/cupvai.png';
 import imagenDefault from '../image/cupave.png';
 import malteada from '../image/malteada.png';
 import { Link } from 'react-router-dom';
-import { useCarrito } from './CarritoProvider';
+import { useCarrito } from '../context/CarritoContext';
 
-export const CartContext = createContext([]);
-
-
-export const CarritoProvider = ({ children }) => {
-  const [carrito, setCarrito] = useState([]);
-
-  const agregarAlCarrito = (producto) => {
-    setCarrito([...carrito, producto]);
-  };
-
-  const eliminarDelCarrito = (id) => {
-    setCarrito(carrito.filter(p => p.id !== id));
-  };
-
-  const vaciarCarrito = () => {
-    setCarrito([]);
-  };
-
-  return (
-    <CarritoContext.Provider value={{ carrito, agregarAlCarrito, eliminarDelCarrito, vaciarCarrito }}>
-      {children}
-    </CarritoContext.Provider>
-  );
-};
- 
 function ProductosList() {
   const [productos, setProductos] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ingredientesSeleccionados, setIngredientesSeleccionados] = useState([]);
-  const { agregarAlCarrito } = useCarrito();
+  const { agregarAlCarrito } = useCarrito(); // Usamos el hook del contexto
 
   useEffect(() => {
     fetch('http://localhost/back_your_nutrition/public/productos')

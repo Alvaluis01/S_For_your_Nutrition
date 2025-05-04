@@ -1,45 +1,27 @@
-
-import {useNavigate  } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+// src/pages/Carrito.js o src/components/Carrito.js (como prefieras organizarlo)
+import React from 'react';
+import { useCarrito } from '../context/CarritoContext';
 
 function Carrito() {
-  const [carrito, setCarrito] = useState([]);
-  const [cliente, setPersona] = useState(null); // Asegúrate de obtener el cliente en la sesión actual
+  const { carrito, vaciarCarrito } = useCarrito();
   const documentoCliente = localStorage.getItem('clienteDocumento');
 
-  useEffect(() => {
-    if (!documentoCliente) {
-      alert('Por favor, inicia sesión para ver los productos');
-      // Redirigir si usas React Router:
-      // navigate('/login');
-    }
-  }, []);
-  useEffect(() => {
-    const carritoGuardado = JSON.parse(localStorage.getItem('carrito'));
-    if (carritoGuardado) setCarrito(carritoGuardado);
-  }, []);
-  
-  useEffect(() => {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-  }, [carrito]);
-  
-  
+  // Calcula el total del pedido
+  const total = carrito.reduce((acc, item) => acc + parseFloat(item.Precio), 0);
+
   const enviarPedido = () => {
     const pedido = {
-      cliente_documento: documentoCliente,
-      fecha: new Date().toISOString().split('T')[0], // Formato: YYYY-MM-DD
-      estado: 'pendiente',
-      tipo_compra: 'domicilio',
-      ubicacion: 'direccion de prueba',
-      total: carrito.reduce((acc, item) => acc + parseFloat(item.Precio), 0),
-      metodo_pago: 'efectivo',
-      productos: carrito.map((item) => ({
-        producto_id: item.Id,
-        ingredientes_adicionales: item.IngredientesAdicionales
-      }))
+      Id_cliente: documentoCliente,
+      Fecha: new Date().toISOString().split('T')[0],
+      Estado: 'pendiente',
+      Id_ingrediente: carrito.flatMap(item => item.IngredientesAdicionales),
+      Id_tipo_compra: '1',
+      Ubicacion_entrega: 'Dirección del cliente',
+      Total: total,
+      Id_Metodo_pago: '1',
     };
-  
-    fetch('http://localhost/back_your_nutrition/public/registrar-pedido', {
+
+    fetch('http://localhost/back_your_nutrition/public/pedidos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -48,44 +30,39 @@ function Carrito() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Pedido registrado:', data);
-        setCarrito([]); // Limpia el carrito después del envío
-        alert('¡Pedido enviado correctamente!');
+        alert('Pedido realizado con éxito');
+        vaciarCarrito(); // Limpiar carrito tras enviar pedido
       })
       .catch(error => {
-        console.error('Error al enviar el pedido:', error);
+        console.error('Error al realizar el pedido:', error);
+        alert('Error al realizar el pedido.');
       });
-  };
-  
-  const handleCheckout = async () => {
-    if (cliente) {
-      const response = await fetch('http://localhost/back_your_nutrition/public/pedidos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          Id_cliente: cliente.Id,
-          // Aquí va más información sobre el pedido (estado, fecha, etc.)
-        })
-      });
-      
-      if (response.ok) {
-        alert('Pedido realizado correctamente');
-      } else {
-        alert('Error al realizar el pedido');
-      }
-    } else {
-      alert('Debes estar logueado para realizar un pedido');
-    }
   };
 
   return (
     <div>
+      <h2>Carrito de compras</h2>
+      {carrito.length === 0 ? (
+        <p>El carrito está vacío.</p>
+      ) : (
+        <ul>
+          {carrito.map((item, index) => (
+            <li key={index}>
+              {item.Nombre} - ${item.Precio}
+              {item.IngredientesAdicionales && item.IngredientesAdicionales.length > 0 && (
+                <p>
+                  <strong>Ingredientes:</strong> {item.IngredientesAdicionales.join(', ')}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
       {carrito.length > 0 && (
-  <button onClick={enviarPedido} style={{ marginTop: '20px' }}>
-    Confirmar pedido
-  </button>
-)}
-
+        <button onClick={enviarPedido} style={{ marginTop: '20px' }}>
+          Hacer Pedido
+        </button>
+      )}
     </div>
   );
 }

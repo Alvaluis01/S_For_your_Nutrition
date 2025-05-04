@@ -16,7 +16,7 @@ import PaginaCliente from './pages/PaginaCliente'; // ✅ IMPORTACIÓN CORRECTA
 import PaginaAdmin from './pages/PaginaAdmin';
 import Carrito from './pages/Carrito';
 import MiCuenta from './pages/MiCuenta';
-import { CarritoProvider } from './pages/CarritoProvider';
+import { CarritoProvider } from './context/CarritoContext';
 import Pedidos from './pages/Pedidos';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Inventario from './pages/Inventario';

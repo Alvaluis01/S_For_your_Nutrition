@@ -7,24 +7,24 @@ import batidoVainilla from '../image/cupvai.png';
 import imagenDefault from '../image/cupave.png';
 import malteada from '../image/malteada.png';
 import { Link } from 'react-router-dom';
+import { CarritoContext, useCarrito } from '../context/CarritoContext';
 
 function ProductosList() {
   const documentoCliente = localStorage.getItem('clienteDocumento');
-
   const [productos, setProductos] = useState([]);
   const [ingredientesDisponibles, setIngredientesDisponibles] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ingredientesAdicionales, setIngredientesAdicionales] = useState([]);
-  const [carrito, setCarrito] = useState([]);
+  const { agregarAlCarrito } = useCarrito();  // Ahora usamos el contexto
+
   useEffect(() => {
     if (!documentoCliente) {
       alert('Por favor, inicia sesión para ver los productos');
-      // Redirigir si usas React Router:
-      // navigate('/login');
+      // Aquí puedes redirigir a login si lo deseas.
     }
-  }, []);
-  
+  }, [documentoCliente]);
+
   useEffect(() => {
     fetch('http://localhost/back_your_nutrition/public/productos')
       .then((response) => response.json())
@@ -63,12 +63,13 @@ function ProductosList() {
     setIngredientesAdicionales([]);
   };
 
-  const agregarAlCarrito = () => {
+  // Agrega el producto al carrito usando el contexto
+  const agregarProducto = () => {
     const productoConIngredientes = {
       ...productoSeleccionado,
       IngredientesAdicionales: [...ingredientesAdicionales],
     };
-    setCarrito([...carrito, productoConIngredientes]);
+    agregarAlCarrito(productoConIngredientes);
     cerrarModal();
   };
 
@@ -147,7 +148,7 @@ function ProductosList() {
                   </label>
                 ))}
               </div>
-              <button style={{ marginTop: '15px' }} onClick={agregarAlCarrito}>
+              <button style={{ marginTop: '15px' }} onClick={agregarProducto}>
                 Agregar al carrito
               </button>
             </div>
@@ -155,22 +156,10 @@ function ProductosList() {
         </div>
       )}
 
+      {/* Mostramos solo una vista resumida del carrito aquí (opcional) */}
       <div className="carrito">
         <h3>Carrito de compras</h3>
-        {carrito.length === 0 ? (
-          <p>El carrito está vacío.</p>
-        ) : (
-          <ul>
-            {carrito.map((item, index) => (
-              <li key={index}>
-                {item.Nombre} - ${item.Precio}
-                {item.IngredientesAdicionales && item.IngredientesAdicionales.length > 0 && (
-                  <p><strong>Ingredientes Adicionales:</strong> {item.IngredientesAdicionales.join(', ')}</p>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        {/** Si deseas mostrar el contenido del carrito acá, podrías hacerlo leyendo del contexto */}
       </div>
     </div>
   );
