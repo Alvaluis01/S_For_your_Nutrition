@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import '../style/register.css';
 
 function ValidarPersona() {
-  // ✅ Hooks siempre deben ir al inicio
+
+
+
+// 
   const [formData, setFormData] = useState({
     Documento: '',
     Contraseña: ''
@@ -17,7 +20,6 @@ function ValidarPersona() {
     setFormData({ ...formData, [name]: value });
   };
 
-  // ✅ Manejador de envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 

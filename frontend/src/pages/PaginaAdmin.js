@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 function PaginaAdmin() {
   
-
+  
+  
   return (
     <div>
       
@@ -18,10 +19,12 @@ function PaginaAdmin() {
             <li><Link to="/pedidos">Pedidos</Link></li>
             <li><Link to="/notificaciones">Notificaciones</Link></li>
             <li><Link to="/inventario">Inventario</Link></li>
+            <li><Link to="/micuentaadmin">Mi Cuenta</Link></li>
           </ul>
         </div>
       </nav>
       <h1>Bienvenido nuevamente Admin🥤</h1>
+      
     </div>
   );
 }

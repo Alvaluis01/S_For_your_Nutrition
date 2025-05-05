@@ -88,7 +88,6 @@ function Comprar() {
           <h2>S´ FOR YOUR NUTRITION</h2>
         </div>
         <ul className="menu-links">
-          <li><Link to="/productos">Productos</Link></li>
           <li><Link to="/comprar">Ordenar</Link></li>
           <li><Link to="/carrito">Carrito</Link></li>
           <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>

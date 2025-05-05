@@ -44,7 +44,7 @@ function ValidarPersona() {
 
   return (
     <div className="login-container">
-      <h2>Iniciar Sesión</h2>
+      <h2>Iniciar </h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"           // Cambiado de "number" a "text"

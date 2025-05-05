@@ -63,7 +63,21 @@ const Carrito = () => {
   };
 
   return (
-    <div className="carrito-container">
+
+    
+    <div className="comprar-container">
+      <nav className="menu-cliente">
+              <div className="logo">
+                <h2>S´ FOR YOUR NUTRITION</h2>
+              </div>
+              <ul className="menu-links">
+                <li><Link to="/comprar">Ordenar</Link></li>
+                <li><Link to="/carrito">Carrito</Link></li>
+                <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>
+              </ul>
+            </nav>
+      
+
       <div className="carrito-header">
         <h2>Tu Carrito de Compras</h2>
         <Link to="/comprar" className="btn-volver">

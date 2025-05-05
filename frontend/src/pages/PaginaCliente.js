@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 
 
 function PaginaCliente() {
-  
+ 
 
+  
   return (
     <div>
       
@@ -16,14 +17,14 @@ function PaginaCliente() {
 
           </div>
           <ul className="menu-links">
-            <li><Link to="/productos">Productos</Link></li>
             <li><Link to="/comprar">Ordenar</Link></li>
             <li><Link to="/carrito">Carrito</Link></li>
-            <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>
+            <li><Link to="/micuenta">Mi Cuenta</Link></li>
           </ul>
         </div>
       </nav>
-      <h1>Bienvenido nuevamente 🥤</h1>
+      <h1>Bienvenido nuevamente Cliente🥤</h1>
+
     </div>
   );
 }

@@ -6,7 +6,7 @@ function Notificaciones() {
   const [nueva, setNueva] = useState({
     rol: 'Preparador de batidos',
     mensaje: '',
-    tipo: 'info', // 'info', 'alerta'
+    tipo: 'info', 
     estado: 'preparando', // o 'listo'
   });
 

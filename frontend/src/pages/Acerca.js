@@ -1,6 +1,10 @@
 import React from 'react';
 import '../style/register.css'; 
 import nosotrosImage from '../image/nosotros.jpg'; 
+import cupavena from '../image/cupave.png';
+import batidoVainilla from '../image/cupvai.png';
+import malteada from '../image/malteada.png';
+import imagenDefault from '../image/cupave.png';
 
 function Acerca() {
   return (
@@ -8,7 +12,7 @@ function Acerca() {
       <h1>Acerca de Nosotros</h1>
 
       {/* Usar la imagen importada */}
-      <img 
+      <img
         src={nosotrosImage} 
         alt="Descripción de la imagen" 
         style={{ width: '300px', marginTop: '20px' }} 

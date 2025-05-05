@@ -23,6 +23,9 @@ class PersonaController extends Controller
     return response()->json(['message' => 'Persona registrada correctamente'], 201);
 }
 
+
+
+
     public function index()
     {
         return Persona::all(); // Obtener todas las personas

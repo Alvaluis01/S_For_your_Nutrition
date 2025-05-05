@@ -1,21 +1,19 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';  // Asegúrate de importar useLocation
-import '../style/register.css';  // 👈 importa el CSS
+import { Link, useLocation } from 'react-router-dom';
+import '../style/register.css';
 
 function Menu() {
-  const userRole = localStorage.getItem('userRole');  // Obtener el rol del usuario desde localStorage
-  const location = useLocation();  // Obtener la ruta actual
+  const userRole = localStorage.getItem('userRole');
+  const location = useLocation();
 
-  // Si el usuario es admin o cliente, o está en las rutas de admin/cliente, no mostrar el menú
-  if (userRole || location.pathname.startsWith('/admin') || location.pathname.startsWith('/cliente')) {
-    return null;  // No muestra el menú si hay un rol guardado o si está en las rutas de admin o cliente
-  }
+  // Ocultar menú si está logueado o en rutas especiales
+  
 
   return (
     <nav className="navbar">
       <Link to="/">Inicio</Link>
       <Link to="/acerca">Acerca de nosotros</Link>
-      <Link to="/contacto">Contactanos</Link>
+      <Link to="/contacto">Contáctanos</Link>
       <Link to="/login">Iniciar sesión</Link>
     </nav>
   );

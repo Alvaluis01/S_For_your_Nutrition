@@ -11,26 +11,32 @@ import ProductList from './pages/ProductList';
 import Comprar from './pages/Comprar';
 import Registrar from './pages/RegistroCliente';
 import Ingresar from './pages/Ingresar';
-import PaginaCliente from './pages/PaginaCliente'; // ✅ IMPORTACIÓN CORRECTA
+import PaginaCliente from './pages/PaginaCliente'; 
 import PaginaAdmin from './pages/PaginaAdmin';
 import Carrito from './pages/Carrito';
-import MiCuenta from './pages/MiCuenta';
+import MiCuenta from './pages/MiCuentaCliente';
+import MiCuentaAdmin from './pages/MiCuentaAdmin';
+
 import { CarritoProvider } from './context/CarritoContext';
 import Pedidos from './pages/Pedidos';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Inventario from './pages/Inventario';
+import IngresarAdmin from './pages/IngresarAdmin';
 
 import Notificaciones from './pages/Notificaciones';
+import IndexProduct from './pages/IndexProduct';
+
+// import LayoutCliente from './pages/LayoutCliente';
 
 
 function App() {
   const userRole = localStorage.getItem('userRole');
   const location = window.location.pathname;
-  const isClienteOrAdmin = location.startsWith('/cliente') || location.startsWith('/admin');
+  const isClienteOrAdmin = location. startsWith('/cliente') || location.startsWith('/admin');
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#1976d2', // color azul típico de MUI
+        main: '#1976d2', 
       },
       secondary: {
         main: '#dc004e',
@@ -43,10 +49,16 @@ return (
   //<ThemeProvider theme={theme}>
     <CarritoProvider>
       <Router>
-        {!userRole && !isClienteOrAdmin && <Menu />}
+      <Menu />
+
         <Routes>
-          {/* Rutas generales */}
-          <Route path="/" element={<ProductList />} />
+        {/* <Route path="/cliente" element={<LayoutCliente />}> */}
+          <Route index element={<IndexProduct />} />
+          <Route path="productos" element={<ProductList />} />
+          <Route path="comprar" element={<Comprar />} />
+          <Route path="carrito" element={<Carrito />} />
+          <Route path="micuenta" element={<MiCuenta />} />
+      
           <Route path="/acerca" element={<Acerca />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/login" element={<Login />} />
@@ -57,11 +69,10 @@ return (
           <Route path="/admin" element={userRole === 'admin' ? <Admin /> : <Navigate to="/ingresar" />} />
           <Route path="/paginacliente" element={<PaginaCliente />} />
           <Route path="/paginaadmin" element={<PaginaAdmin />} />
-          <Route path="/productos" element={<ProductList />} />
-          <Route path="/comprar" element={<Comprar />} />
-          <Route path="/carrito" element={<Carrito />} />
-          <Route path="/mi-cuenta" element={<MiCuenta />} />
           <Route path="/pedidos" element={<Pedidos />} />
+          <Route path="/ingresaradmin" element={<IngresarAdmin />} />
+          <Route path="/indexproduct" element={<IndexProduct />} />
+          <Route path="/micuentaadmin" element={<MiCuentaAdmin />} />
 
           <Route path="/notificaciones" element={<Notificaciones />} />
 

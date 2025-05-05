@@ -6,11 +6,11 @@ function Login() {
   const navigate = useNavigate();
 
   const goToCliente = () => {
-    navigate('/cliente');
+    navigate('/LoginCliente');
   };
 
   const goToAdministrativo = () => {
-    navigate('/ingresar');
+    navigate('/LoginAdmin');
   };
 
   return (

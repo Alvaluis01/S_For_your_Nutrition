@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCarrito } from '../context/CarritoContext';
 import '../style/products.css';
+import { imagenes } from '../image';
 
 function ProductosList() {
   const [productos, setProductos] = useState([]);
@@ -60,13 +61,16 @@ function ProductosList() {
 
   return (
     <div className="productos-container">
-      <h2>Nuestros Productos</h2>
+      <h1>Nuestros Productos</h1>
       <div className="productos-grid">
         {productos.map(producto => (
           <div key={producto.Id} className="producto-card" onClick={() => abrirModal(producto)}>
-            <img src={`/images/${producto.Nombre.toLowerCase().replace(/\s/g, '-')}.jpg`} 
-                 alt={producto.Nombre} 
-                 className="producto-imagen" />
+              <img 
+                src={imagenes[producto.Nombre.toLowerCase()]} 
+                alt={ProductosList.Nombre} 
+                className="producto-imagen" 
+              />
+
             <div className="producto-info">
               <h3>{producto.Nombre}</h3>
               <p>${producto.Precio}</p>
