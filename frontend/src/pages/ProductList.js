@@ -60,7 +60,10 @@ function ProductosList() {
   };
 
   return (
-    <div className="productos-container">
+    
+    <div >
+
+
       <h1>Nuestros Productos</h1>
       <div className="productos-grid">
         {productos.map(producto => (

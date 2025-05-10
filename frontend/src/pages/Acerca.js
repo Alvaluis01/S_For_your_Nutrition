@@ -18,12 +18,12 @@ function Acerca() {
         style={{ width: '300px', marginTop: '20px' }} 
       />
 
-      <p style={{ marginTop: '20px', fontSize: '18px', color: '#555' }}>
+      <h1 style={{ marginTop: '20px', fontSize: '18px', color: '#555' }}>
       Porque en familia también puedes disfrutar de algo delicioso y saludable ❣️🤗<br/>
       Recuerda que puedes pedir tu Shake sin toppings y que nuestras bebidas son bajas <br/>
       en calorías y muy nutritivas (te aportan proteína,  fibra, hierro, calcio, entre otros)<br/>
       ❣️ Te esperamos 🫶🏼🤗
-      </p>
+      </h1>
     </div>
   );
 }

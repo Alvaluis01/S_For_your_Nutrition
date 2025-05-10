@@ -81,6 +81,7 @@ function RegistroPersona() {
             <li><Link to="/productos">Productos</Link></li> {/* Enlace para productos */}
             <li><a href="#">Inventario</a></li>
             <li><a href="#">Mi Cuenta</a></li>
+            
           </ul>
         </div>
       </nav>

@@ -7,10 +7,13 @@ import Login from './components/Login';
 import Cliente from './components/Cliente';
 import Admin from './components/Admin';
 import LoginCliente from './pages/LoginCliente';
+
+import LoginAdmin from './pages/LoginAdmin';
 import ProductList from './pages/ProductList';
 import Comprar from './pages/Comprar';
 import Registrar from './pages/RegistroCliente';
 import Ingresar from './pages/Ingresar';
+
 import PaginaCliente from './pages/PaginaCliente'; 
 import PaginaAdmin from './pages/PaginaAdmin';
 import Carrito from './pages/Carrito';
@@ -65,6 +68,8 @@ return (
           <Route path="/registrar" element={<Registrar />} />
           <Route path="/ingresar" element={<Ingresar />} />
           <Route path="/logincliente" element={<LoginCliente />} />
+          <Route path="/loginadmin" element={<LoginAdmin />} />
+
           <Route path="/cliente" element={userRole === 'cliente' ? <Cliente /> : <Navigate to="/logincliente" />} />
           <Route path="/admin" element={userRole === 'admin' ? <Admin /> : <Navigate to="/ingresar" />} />
           <Route path="/paginacliente" element={<PaginaCliente />} />
