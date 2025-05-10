@@ -48,7 +48,7 @@ function ValidarPersona() {
   };
 
   return (
-    <div className="login-container">
+    <div className="auth-container">
       <h2>Ingresar como Admin</h2>
       <form onSubmit={handleSubmit}>
         <input

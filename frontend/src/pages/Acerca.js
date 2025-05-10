@@ -1,5 +1,7 @@
 import React from 'react';
 import '../style/register.css'; 
+
+import '../style/products.css'; 
 import nosotrosImage from '../image/nosotros.jpg'; 
 import cupavena from '../image/cupave.png';
 import batidoVainilla from '../image/cupvai.png';

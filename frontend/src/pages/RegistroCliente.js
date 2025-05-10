@@ -58,7 +58,7 @@ function RegistroPersona() {
   };
 
   return (
-    <div className="registro-container">
+    <div className="auth-container">
       <h2>Registro persona</h2>
       <form onSubmit={handleSubmit}>
         <input

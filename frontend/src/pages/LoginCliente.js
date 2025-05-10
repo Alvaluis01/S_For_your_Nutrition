@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../style/register.css';  // Reutilizamos tu estilo
-
+  // Reutilizamos tu estilo
+import '../style/products.css';
 function LoginCliente() {
   return (
     <div>
@@ -10,7 +10,7 @@ function LoginCliente() {
 
       {/* Contenido principal */}
       <div className="contenido-principal">
-        <h1>Bienvenidoooo Cliente</h1>
+        <h1>Bienvenido Cliente</h1>
         <p>¿Qué deseas hacer?</p>
 
         <div className="opciones-login">

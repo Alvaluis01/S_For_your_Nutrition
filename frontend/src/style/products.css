@@ -154,3 +154,27 @@ h1 {
 .modal-actions button:last-child:hover {
   background: #e53935;
 }
+
+
+
+body {
+  margin: 0;
+  background-image: url('../image/i.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  color: #333;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7); /* Blanco translúcido */
+  z-index: -1; /* Debajo de todo el contenido */
+}

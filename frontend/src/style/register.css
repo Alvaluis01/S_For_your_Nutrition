@@ -1,13 +1,14 @@
-/* General Auth Styles */
+
 .auth-container {
   max-width: 400px;
-  margin: auto;
+  margin: 50px auto; /* Cambiado de solo "auto" a "50px auto" para agregar espacio arriba */
   background: #F8F9FA;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   text-align: center;
 }
+
 
 .logo-section h1 {
   font-size: 2rem;
