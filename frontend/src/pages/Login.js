@@ -46,24 +46,29 @@ function ValidarPersona() {
     <div className="login-container">
       <h2>Iniciar </h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"           // Cambiado de "number" a "text"
-          name="Usuario"
-          placeholder="Usuario" // Cambiado de "Documento" a "Usuario"
-          value={formData.Nombres}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="Contraseña"
-          placeholder="Contraseña"
-          value={formData.Contraseña}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Ingresar</button>
-      </form>
+  <label>
+    Nombre de Usuario
+    <input
+      type="text"
+      name="Nombres"
+      value={formData.Nombres}
+      onChange={handleChange}
+      required
+    />
+  </label>
+  <label>
+    Contraseña
+    <input
+      type="password"
+      name="Contraseña"
+      value={formData.Contraseña}
+      onChange={handleChange}
+      required
+    />
+  </label>
+  <button type="submit">Iniciar Sesión</button>
+</form>
+
     </div>
   );
 }

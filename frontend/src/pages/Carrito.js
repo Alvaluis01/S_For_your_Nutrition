@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useCarrito } from '../context/CarritoContext';
 import { Link } from 'react-router-dom';
-import '../style/carrito.css';
-
+import '../style/carrito.css'; 
 // Importa tus imágenes de productos
 import cupavena from '../image/cupave.png';
 import batidoVainilla from '../image/cupvai.png';
@@ -61,6 +60,10 @@ const Carrito = () => {
         : [...prev, ingrediente]
     );
   };
+
+
+
+
 
   return (
 
@@ -189,6 +192,9 @@ const Carrito = () => {
                       </div>
                     </>
                   )}
+
+
+
                   
                   <p className="subtotal">Subtotal: ${(item.precio * item.cantidad).toFixed(2)}</p>
                 </div>
@@ -197,23 +203,44 @@ const Carrito = () => {
           </div>
 
           <div className="resumen-carrito">
-            <h3>Resumen de Compra</h3>
-            <div className="total">
-              <span>Total:</span>
-              <span>${calcularTotal().toFixed(2)}</span>
-            </div>
-            <div className="acciones-carrito">
-              <button onClick={vaciarCarrito} className="btn-vaciar">
-                Vaciar Carrito
-              </button>
-              <button 
-                onClick={handleFinalizarCompra}
-                className="btn-finalizar"
-              >
-                Finalizar Compra (PSE)
-              </button>
-            </div>
-          </div>
+  <h3>Resumen de Compra</h3>
+
+  <div className="lista-productos-resumen">
+    {carrito.map((item) => (
+      <div key={item.id} className="producto-resumen">
+        <p><strong>{item.Nombre}</strong> × {item.cantidad}</p>
+        {item.ingredientesAdicionales?.length > 0 && (
+          <ul className="ingredientes-resumen">
+            {item.ingredientesAdicionales.map((ing, index) => (
+              <li key={index}>+ {ing}</li>
+            ))}
+          </ul>
+        )}
+        <p>Total: ${(item.precio * item.cantidad).toFixed(2)}</p>
+        <hr />
+      </div>
+    ))}
+  </div>
+
+  <div className="total">
+    <span>Total:</span>
+    <span>${calcularTotal().toFixed(2)}</span>
+  </div>
+
+  <div className="acciones-carrito">
+    <button onClick={vaciarCarrito} className="btn-vaciar">
+      Vaciar Carrito
+    </button>
+    <button 
+      onClick={handleFinalizarCompra}
+      className="btn-finalizar"
+    >
+      Finalizar Compra (PSE)
+    </button>
+  </div>
+</div>
+
+
         </>
       )}
     </div>

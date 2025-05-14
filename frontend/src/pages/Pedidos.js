@@ -32,6 +32,8 @@ function RegistrarPedido() {
     }
   };
 
+
+  
   return (
     <div>
        

@@ -12,12 +12,13 @@ import LoginAdmin from './pages/LoginAdmin';
 import ProductList from './pages/ProductList';
 import Comprar from './pages/Comprar';
 import Registrar from './pages/RegistroCliente';
+
 import Ingresar from './pages/Ingresar';
 
 import PaginaCliente from './pages/PaginaCliente'; 
 import PaginaAdmin from './pages/PaginaAdmin';
 import Carrito from './pages/Carrito';
-import MiCuenta from './pages/MiCuentaCliente';
+import MiCuentaCliente from './pages/MiCuentaCliente';
 import MiCuentaAdmin from './pages/MiCuentaAdmin';
 
 import { CarritoProvider } from './context/CarritoContext';
@@ -60,7 +61,6 @@ return (
           <Route path="productos" element={<ProductList />} />
           <Route path="comprar" element={<Comprar />} />
           <Route path="carrito" element={<Carrito />} />
-          <Route path="micuenta" element={<MiCuenta />} />
       
           <Route path="/acerca" element={<Acerca />} />
           <Route path="/contacto" element={<Contacto />} />
@@ -78,6 +78,8 @@ return (
           <Route path="/ingresaradmin" element={<IngresarAdmin />} />
           <Route path="/indexproduct" element={<IndexProduct />} />
           <Route path="/micuentaadmin" element={<MiCuentaAdmin />} />
+          
+          <Route path="/micuentacliente" element={<MiCuentaCliente />} />
 
           <Route path="/notificaciones" element={<Notificaciones />} />
 

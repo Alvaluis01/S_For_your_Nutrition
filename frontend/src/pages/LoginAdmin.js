@@ -10,7 +10,7 @@ function LoginAdmin() {
 
       {/* Contenido principal */}
       <div className="contenido-principal">
-        <h1>BienvenidooooAdmin</h1>
+        <h1>Bienvenido Admin</h1>
         <p>¿Qué deseas hacer?</p>
 
         <div className="opciones-login">

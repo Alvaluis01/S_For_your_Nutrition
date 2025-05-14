@@ -174,7 +174,7 @@ body::before {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.7); /* Blanco translúcido */
-  z-index: -1; /* Debajo de todo el contenido */
+  height: 200vh;
+  background-color: rgba(255, 255, 255, 0.7);  
+  z-index: -1;  
 }

@@ -8,14 +8,19 @@ class CorsMiddleware
 {
     public function handle($request, Closure $next)
     {
+        // Permitir el preflight (OPTIONS) directamente
+        if ($request->getMethod() === 'OPTIONS') {
+            return response('', 200)
+                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
+                ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+                ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+        }
+
+        // Para las demás peticiones normales
         $response = $next($request);
-
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-        return $response;
+        return $response
+            ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
     }
 }
-// Compare this snippet from back_your_nutrition/app/Http/Controllers/IngredienteController.php:
-// <?php    

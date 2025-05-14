@@ -12,10 +12,10 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
 $router->options('{any:.*}', function () {
     return response('', 200);
 });
+
 
 
 $router->get('/', function () use ($router) {
@@ -120,6 +120,8 @@ $router->get('/pedidos/{id}', 'PedidoController@show');
 $router->post('/pedidos', 'PedidoController@store');
 $router->put('/pedidos/{id}', 'PedidoController@update');
 $router->delete('/pedidos/{id}', 'PedidoController@destroy');
+$router->post('/guardarPedido', 'PedidoController@guardarPedido');
+
 
 $router->get('/facturas', 'FacturaController@index');
 $router->get('/facturas/{id}', 'FacturaController@show');
@@ -138,3 +140,6 @@ $router->get('/ingredientesAdicionales/{id}', 'IngredienteAdicionalController@sh
 $router->post('/ingredientesAdicionales', 'IngredienteAdicionalController@store');
 $router->put('/ingredientesAdicionales/{id}', 'IngredienteAdicionalController@update');
 $router->delete('/ingredientesAdicionales/{id}', 'IngredienteAdicionalController@destroy');
+
+
+
