@@ -61,10 +61,6 @@ const Carrito = () => {
     );
   };
 
-
-
-
-
   return (
 
     
