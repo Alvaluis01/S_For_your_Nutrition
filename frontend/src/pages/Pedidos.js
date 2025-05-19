@@ -4,7 +4,7 @@ import { useCarrito } from '../context/CarritoContext';
 import '../style/pedidos.css';
 
 function Pedidos() {
-  const { carrito, vaciarCarrito, calcularTotal, actualizarCantidad, eliminarDelCarrito } = useCarrito();
+  const { carrito, vaciarCarrito, calcularTotal } = useCarrito();
   const [pedidos, setPedidos] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({
@@ -16,27 +16,89 @@ function Pedidos() {
   const [todosIngredientes, setTodosIngredientes] = useState([]);
   const [editingProductIndex, setEditingProductIndex] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Cargar ingredientes disponibles
   useEffect(() => {
-    fetch('http://localhost/back_your_nutrition/public/ingredientes')
-      .then(response => response.json())
-      .then(data => setTodosIngredientes(data))
-      .catch(error => console.error('Error cargando ingredientes:', error));
+    const fetchIngredientes = async () => {
+      try {
+        const response = await fetch('http://localhost/back_your_nutrition/public/ingredientes');
+        const data = await response.json();
+        setTodosIngredientes(data);
+      } catch (error) {
+        console.error('Error cargando ingredientes:', error);
+      }
+    };
+
+    fetchIngredientes();
   }, []);
 
-  // Cargar pedidos desde localStorage al inicio
+  // Cargar pedidos al montar el componente
   useEffect(() => {
-    const savedPedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    setPedidos(savedPedidos);
+    const loadPedidos = () => {
+      try {
+        const savedPedidos = localStorage.getItem('pedidos');
+        if (savedPedidos) {
+          const parsedPedidos = JSON.parse(savedPedidos);
+          if (Array.isArray(parsedPedidos)) {
+            setPedidos(parsedPedidos);
+          }
+        }
+      } catch (error) {
+        console.error('Error al cargar pedidos:', error);
+        // Intentar cargar desde backup si existe
+        const backup = localStorage.getItem('pedidos_backup');
+        if (backup) {
+          try {
+            const parsedBackup = JSON.parse(backup);
+            if (Array.isArray(parsedBackup)) {
+              setPedidos(parsedBackup);
+            }
+          } catch (e) {
+            console.error('Error al cargar backup:', e);
+          }
+        }
+      } finally {
+        setIsLoaded(true);
+      }
+    };
+
+    loadPedidos();
+
+    // Escuchar cambios en otras pestañas
+    const handleStorageChange = (e) => {
+      if (e.key === 'pedidos') {
+        loadPedidos();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Guardar pedidos en localStorage cuando cambian
+  // Guardar pedidos cuando cambian (con sistema de backup)
   useEffect(() => {
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-  }, [pedidos]);
+    if (!isLoaded) return;
 
-  // Registrar pedido desde el carrito
+    const savePedidos = () => {
+      try {
+        // Primero hacer backup del estado actual
+        const currentPedidos = localStorage.getItem('pedidos');
+        if (currentPedidos) {
+          localStorage.setItem('pedidos_backup', currentPedidos);
+        }
+
+        // Luego guardar los nuevos
+        localStorage.setItem('pedidos', JSON.stringify(pedidos));
+      } catch (error) {
+        console.error('Error al guardar pedidos:', error);
+      }
+    };
+
+    savePedidos();
+  }, [pedidos, isLoaded]);
+
+  // Registrar nuevo pedido
   const registrarPedidoDesdeCarrito = () => {
     if (carrito.length === 0) {
       alert('El carrito está vacío');
@@ -51,11 +113,21 @@ function Pedidos() {
         ingredientesAdicionales: item.ingredientesAdicionales || []
       })),
       fecha: new Date().toISOString().split('T')[0],
-      total: calcularTotal(),  // Calculamos el total aquí
+      total: calcularTotal(),
       estado: 'pendiente'
     };
 
-    setPedidos([...pedidos, nuevoPedido]);
+    setPedidos(prev => {
+      const newPedidos = [...prev, nuevoPedido];
+      // Guardar inmediatamente
+      try {
+        localStorage.setItem('pedidos', JSON.stringify(newPedidos));
+      } catch (error) {
+        console.error('Error al guardar inmediatamente:', error);
+      }
+      return newPedidos;
+    });
+
     vaciarCarrito();
     alert('Pedido registrado exitosamente');
   };
@@ -72,7 +144,6 @@ function Pedidos() {
     setEditingProduct(null);
   };
 
-  // Función para calcular el total basado en productos y sus cantidades
   const calcularTotalPedido = (productos) => {
     return productos.reduce((total, producto) => {
       const subtotal = producto.precio * producto.cantidad;
@@ -81,7 +152,7 @@ function Pedidos() {
   };
 
   const guardarEdicion = () => {
-    const totalCalculado = calcularTotalPedido(editForm.productos); // Calculamos el total automáticamente
+    const totalCalculado = calcularTotalPedido(editForm.productos);
 
     setPedidos(pedidos.map(pedido => 
       pedido.id === editingId 
@@ -90,7 +161,7 @@ function Pedidos() {
             cliente: editForm.cliente,
             productos: editForm.productos,
             fecha: editForm.fecha,
-            total: totalCalculado,  // Usamos el total calculado
+            total: totalCalculado,
             estado: editForm.estado
           } 
         : pedido
@@ -158,7 +229,6 @@ function Pedidos() {
     'cancelado'
   ];
 
-  // Función para formatear los productos e ingredientes
   const formatProductos = (productos, isEditable = false) => {
     if (!productos || !Array.isArray(productos)) return "No hay productos";
     
@@ -307,7 +377,6 @@ function Pedidos() {
                       />
                     </div>
                     
-                    {/* Eliminamos la edición del total manual */}
                     <div className="form-group">
                       <label>Estado:</label>
                       <select
