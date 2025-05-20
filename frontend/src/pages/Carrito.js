@@ -23,7 +23,7 @@ const Carrito = () => {
 
   // Cargar los ingredientes disponibles al montar el componente
   React.useEffect(() => {
-    fetch('http://localhost/back_your_nutrition/public/ingredientes')
+    fetch('http://localhost:8000/ingredientes')
       .then(response => response.json())
       .then(data => setTodosIngredientes(data))
       .catch(error => console.error('Error cargando ingredientes:', error));

@@ -13,13 +13,13 @@ function ProductosList() {
 
   useEffect(() => {
     // Cargar productos
-    fetch('http://localhost/back_your_nutrition/public/productos')
+    fetch('http://localhost:8000/productos')
       .then(res => res.json())
       .then(setProductos)
       .catch(console.error);
 
     // Cargar ingredientes disponibles
-    fetch('http://localhost/back_your_nutrition/public/ingredientes')
+    fetch('http://localhost:8000/ingredientes')
       .then(res => res.json())
       .then(setIngredientes)
       .catch(console.error);

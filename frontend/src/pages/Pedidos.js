@@ -22,7 +22,7 @@ function Pedidos() {
   useEffect(() => {
     const fetchIngredientes = async () => {
       try {
-        const response = await fetch('http://localhost/back_your_nutrition/public/ingredientes');
+        const response = await fetch('http://localhost:8000/ingredientes');
         const data = await response.json();
         setTodosIngredientes(data);
       } catch (error) {
