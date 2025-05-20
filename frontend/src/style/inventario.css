@@ -55,3 +55,41 @@ select option:not([disabled]) {
   color: #000;
 }
   
+.acciones {
+  display: flex;
+  gap: 5px;
+}
+
+.acciones button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.acciones .editar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.acciones .eliminar {
+  background-color: #f44336;
+  color: white;
+}
+
+.acciones-edicion {
+  display: flex;
+  gap: 5px;
+}
+
+.acciones-edicion button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.acciones-edicion .cancelar {
+  background-color: #f44336;
+  color: white;
+}
