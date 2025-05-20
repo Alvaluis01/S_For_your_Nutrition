@@ -46,4 +46,12 @@
     font-weight: bold;
     color: red;
   }
+
+  .placeholder-selected {
+  color: #999;
+}
+
+select option:not([disabled]) {
+  color: #000;
+}
   

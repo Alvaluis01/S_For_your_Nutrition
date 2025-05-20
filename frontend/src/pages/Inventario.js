@@ -1,195 +1,309 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../style/inventario.css';
 import { Link } from 'react-router-dom';
 
-
 const Inventario = () => {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      idProducto: 'A001',
-      tipo: 'Fruta',
-      nombre: 'Fresa',
-      proveedor: 'Frutas S.A.',
-      cantidad: 20,
-      unidad: 'kg',
-      fechaModificacion: new Date().toLocaleString(),
-    },
-    {
-      id: 2,
-      idProducto: 'A002',
-      tipo: 'Fruta',
-      nombre: 'Banano',
-      proveedor: 'Campo Verde',
-      cantidad: 15,
-      unidad: 'kg',
-      fechaModificacion: new Date().toLocaleString(),
-    },
-  ]);
-
+  const [items, setItems] = useState([]);
   const [nuevo, setNuevo] = useState({
-    idProducto: '',
-    tipo: '',
-    nombre: '',
-    proveedor: '',
-    cantidad: '',
-    unidad: '',
+    Nombre: '',
+    Precio: '',
+    Disponibilidad: 1,
+    Id_ingrediente: '',
+    Id_cantidad_ingrediente: '',
+    Descripcion: '',
+    Tamaño: '',
+    Calorias: ''
   });
-
   const [editando, setEditando] = useState(null);
+
+  useEffect(() => {
+    cargarProductos();
+    obtenerUltimoId();
+  }, []);
+
+  const cargarProductos = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/productos');
+      if (!res.ok) throw new Error('Error al cargar productos');
+      const data = await res.json();
+      setItems(data);
+    } catch (err) {
+      console.error('Error al cargar productos', err);
+    }
+  };
+
+  const obtenerUltimoId = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/productos');
+      if (!res.ok) throw new Error('Error al obtener últimos IDs');
+      const data = await res.json();
+      
+      if (data.length > 0) {
+        const lastItem = data[data.length - 1];
+        setNuevo(prev => ({
+          ...prev,
+          Id_ingrediente: (parseInt(lastItem.Id_ingrediente) + 1).toString(),
+          Id_cantidad_ingrediente: (parseInt(lastItem.Id_cantidad_ingrediente) + 1).toString()
+        }));
+      } else {
+        setNuevo(prev => ({
+          ...prev,
+          Id_ingrediente: '1',
+          Id_cantidad_ingrediente: '1'
+        }));
+      }
+    } catch (error) {
+      console.error('Error al obtener últimos IDs', error);
+    }
+  };
 
   const manejarCambio = (e) => {
     const { name, value } = e.target;
     setNuevo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const obtenerFechaActual = () => {
-    return new Date().toLocaleString(); // Fecha y hora local legible
-  };
-
-  const agregar = () => {
+  const agregar = async () => {
     if (
-      nuevo.idProducto &&
-      nuevo.tipo &&
-      nuevo.nombre &&
-      nuevo.proveedor &&
-      nuevo.cantidad &&
-      nuevo.unidad
+      !nuevo.Nombre || !nuevo.Precio || !nuevo.Id_ingrediente ||
+      !nuevo.Id_cantidad_ingrediente || !nuevo.Descripcion ||
+      !nuevo.Tamaño || !nuevo.Calorias
     ) {
-      const nuevoItem = {
-        id: Date.now(),
-        ...nuevo,
-        cantidad: parseInt(nuevo.cantidad),
-        fechaModificacion: obtenerFechaActual(),
-      };
-      setItems([...items, nuevoItem]);
-      setNuevo({
-        idProducto: '',
-        tipo: '',
-        nombre: '',
-        proveedor: '',
-        cantidad: '',
-        unidad: '',
+      alert("Por favor completa todos los campos.");
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:8000/productos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(nuevo)
       });
+
+      if (!res.ok) throw new Error('Error al agregar producto');
+
+      const nuevoProducto = await res.json();
+      setItems([...items, nuevoProducto]);
+
+      setNuevo(prev => ({
+        Nombre: '',
+        Precio: '',
+        Disponibilidad: 1,
+        Id_ingrediente: (parseInt(prev.Id_ingrediente) + 1).toString(),
+        Id_cantidad_ingrediente: (parseInt(prev.Id_cantidad_ingrediente) + 1).toString(),
+        Descripcion: '',
+        Tamaño: '',
+        Calorias: ''
+      }));
+    } catch (error) {
+      console.error('Error al agregar producto', error);
     }
   };
 
-  const eliminar = (id) => {
-    setItems(items.filter((item) => item.id !== id));
+  const eliminarProducto = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:8000/productos/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) throw new Error('Error al eliminar producto');
+
+      setItems(items.filter(item => item.id !== id));
+      
+      // Si estábamos editando el producto eliminado, cancelamos la edición
+      if (editando && editando.id === id) {
+        setEditando(null);
+        setNuevo({
+          Nombre: '',
+          Precio: '',
+          Disponibilidad: 1,
+          Id_ingrediente: '',
+          Id_cantidad_ingrediente: '',
+          Descripcion: '',
+          Tamaño: '',
+          Calorias: ''
+        });
+      }
+    } catch (error) {
+      console.error('Error al eliminar producto', error);
+    }
   };
 
-  const editar = (item) => {
-    setEditando(item);
+  const iniciarEdicion = (producto) => {
+    setEditando(producto);
     setNuevo({
-      idProducto: item.idProducto,
-      tipo: item.tipo,
-      nombre: item.nombre,
-      proveedor: item.proveedor,
-      cantidad: item.cantidad,
-      unidad: item.unidad,
+      Nombre: producto.Nombre,
+      Precio: producto.Precio,
+      Disponibilidad: producto.Disponibilidad,
+      Id_ingrediente: producto.Id_ingrediente,
+      Id_cantidad_ingrediente: producto.Id_cantidad_ingrediente,
+      Descripcion: producto.Descripcion,
+      Tamaño: producto.Tamaño,
+      Calorias: producto.Calorias
     });
   };
 
-  const guardar = () => {
-    setItems(
-      items.map((item) =>
-        item.id === editando.id
-          ? {
-              ...editando,
-              ...nuevo,
-              cantidad: parseInt(nuevo.cantidad),
-              fechaModificacion: obtenerFechaActual(),
-            }
-          : item
-      )
-    );
+  const cancelarEdicion = () => {
     setEditando(null);
     setNuevo({
-      idProducto: '',
-      tipo: '',
-      nombre: '',
-      proveedor: '',
-      cantidad: '',
-      unidad: '',
+      Nombre: '',
+      Precio: '',
+      Disponibilidad: 1,
+      Id_ingrediente: '',
+      Id_cantidad_ingrediente: '',
+      Descripcion: '',
+      Tamaño: '',
+      Calorias: ''
     });
+  };
+
+  const actualizarProducto = async () => {
+    if (
+      !nuevo.Nombre || !nuevo.Precio || !nuevo.Id_ingrediente ||
+      !nuevo.Id_cantidad_ingrediente || !nuevo.Descripcion ||
+      !nuevo.Tamaño || !nuevo.Calorias
+    ) {
+      alert("Por favor completa todos los campos.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:8000/productos/${editando.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(nuevo)
+      });
+
+      if (!res.ok) throw new Error('Error al actualizar producto');
+
+      const productoActualizado = await res.json();
+      setItems(items.map(item => item.id === editando.id ? productoActualizado : item));
+      
+      setEditando(null);
+      setNuevo({
+        Nombre: '',
+        Precio: '',
+        Disponibilidad: 1,
+        Id_ingrediente: '',
+        Id_cantidad_ingrediente: '',
+        Descripcion: '',
+        Tamaño: '',
+        Calorias: ''
+      });
+    } catch (error) {
+      console.error('Error al actualizar producto', error);
+    }
   };
 
   return (
     <div>
-         <div>
-              
-              
-                    <nav className="menu-cliente">
-                      <div className="contenido-cliente">
-                        <div className="logo">
-                          <h2>S´ FOR YOUR NUTRITION</h2>
-                        </div>
-                        <ul className="menu-links">
-                          <li><Link to="/pedidos">Pedidos</Link></li>
-                          <li><Link to="/notificaciones">Notificaciones</Link></li>
-                          <li><Link to="/inventario">Inventario</Link></li>
-                          <li><Link to="/micuentaadmin">Mi Cuenta</Link></li>
-                        </ul>
-                      </div>
-                    </nav>
-              <h1>Bienvenido nuevamente Admin🥤</h1>
+      <nav className="menu-cliente">
+        <div className="contenido-cliente">
+          <div className="logo"><h2>S´ FOR YOUR NUTRITION</h2></div>
+          <ul className="menu-links">
+            <li><Link to="/pedidos">Pedidos</Link></li>
+            <li><Link to="/notificaciones">Notificaciones</Link></li>
+            <li><Link to="/inventario">Inventario</Link></li>
+            <li><Link to="/micuentaadmin">Mi Cuenta</Link></li>
+          </ul>
+        </div>
+      </nav>
+
+      <h1>Bienvenido nuevamente Admin🥤</h1>
+
+      <div className="inventario">
+        <h2>Inventario</h2>
+
+        <div className="formulario">
+          <select 
+            name="Nombre" 
+            value={nuevo.Nombre} 
+            onChange={manejarCambio}
+            className={!nuevo.Nombre ? 'placeholder-selected' : ''}
+          >
+            <option value="" disabled hidden>Seleccione un producto</option>
+            <option value="Cupcake de vainilla">Cupcake de vainilla</option>
+            <option value="Cupcake de Avena">Cupcake de Avena</option>
+            <option value="Malteada">Malteada</option>
+          </select>
+
+          <input name="Precio" type="number" placeholder="Precio" value={nuevo.Precio} onChange={manejarCambio} />
+          
+          <input name="Id_ingrediente" placeholder="ID Ingrediente" value={nuevo.Id_ingrediente} onChange={manejarCambio} readOnly />
+          <input name="Id_cantidad_ingrediente" placeholder="ID Cantidad" value={nuevo.Id_cantidad_ingrediente} onChange={manejarCambio} readOnly />
+          
+          <input name="Descripcion" placeholder="Descripción" value={nuevo.Descripcion} onChange={manejarCambio} />
+          
+          <select 
+            name="Tamaño" 
+            value={nuevo.Tamaño} 
+            onChange={manejarCambio}
+            className={!nuevo.Tamaño ? 'placeholder-selected' : ''}
+          >
+            <option value="" disabled hidden>Seleccione un tamaño</option>
+            <option value="100">100</option>
+            <option value="150">150</option>
+            <option value="250">250</option>
+          </select>
+          
+          <input name="Calorias" placeholder="Calorías" value={nuevo.Calorias} onChange={manejarCambio} />
+          
+          <select name="Disponibilidad" value={nuevo.Disponibilidad} onChange={manejarCambio}>
+            <option value="1">Disponible (1)</option>
+            <option value="0">No disponible (0)</option>
+          </select>
+          
+          {editando ? (
+            <div className="acciones-edicion">
+              <button onClick={actualizarProducto}>Guardar</button>
+              <button onClick={cancelarEdicion} className="cancelar">Cancelar</button>
             </div>
-
-
-            <div className="inventario">
-
-      <h2>Inventario</h2>
-      
-      <div className="formulario">
-        
-        <input name="idProducto" placeholder="ID Producto" value={nuevo.idProducto} onChange={manejarCambio} />
-        <input name="tipo" placeholder="Tipo" value={nuevo.tipo} onChange={manejarCambio} />
-        <input name="nombre" placeholder="Nombre" value={nuevo.nombre} onChange={manejarCambio} />
-        <input name="proveedor" placeholder="Proveedor" value={nuevo.proveedor} onChange={manejarCambio} />
-        <input name="cantidad" type="number" placeholder="Cantidad" value={nuevo.cantidad} onChange={manejarCambio} />
-        <input name="unidad" placeholder="Unidad" value={nuevo.unidad} onChange={manejarCambio} />
-        {editando ? (
-          <button onClick={guardar}>Guardar</button>
-        ) : (
-          <button onClick={agregar}>Agregar</button>
-        )}
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Tipo</th>
-            <th>Nombre</th>
-            <th>Proveedor</th>
-            <th>Cantidad</th>
-            <th>Unidad</th>
-            <th>Modificado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
-              <td>{item.idProducto}</td>
-              <td>{item.tipo}</td>
-              <td>{item.nombre}</td>
-              <td>{item.proveedor}</td>
-              <td className={item.cantidad <= 5 ? 'bajo-stock' : ''}>{item.cantidad}</td>
-              <td>{item.unidad}</td>
-              <td>{item.fechaModificacion}</td>
-              <td>
-                <button onClick={() => editar(item)}>Editar</button>
-                <button onClick={() => eliminar(item.id)}>Eliminar</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-            
+          ) : (
+            <button onClick={agregar}>Agregar</button>
+          )}
         </div>
 
-    
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Descripción</th>
+              <th>ID Ingrediente</th>
+              <th>ID Cantidad Ingrediente</th>
+              <th>Tamaño (onza)</th>
+              <th>Calorías (g)</th>
+              <th>Disponibilidad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.length === 0 ? (
+              <tr><td colSpan="9">No hay productos registrados</td></tr>
+            ) : (
+              items.map((item, index) => (
+                <tr key={item.id || index}>
+                  <td>{item.Nombre}</td>
+                  <td>{item.Precio}</td>
+                  <td>{item.Descripcion}</td>
+                  <td>{item.Id_ingrediente}</td>
+                  <td>{item.Id_cantidad_ingrediente}</td>
+                  <td>{item.Tamaño}</td>
+                  <td>{item.Calorias}</td>
+                  <td>{item.Disponibilidad === 1 ? 'Disponible' : 'No disponible'}</td>
+                  <td className="acciones">
+                    <button onClick={() => iniciarEdicion(item)} className="editar">Editar</button>
+                    <button onClick={() => eliminarProducto(item.id)} className="eliminar">Eliminar</button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

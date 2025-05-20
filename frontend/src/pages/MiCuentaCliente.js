@@ -13,7 +13,7 @@ function RegistroPersona() {
     Direccion: '',
     Id_ciudad: '',
     Contraseña: '',
-    Foto: null
+    Foto: null  
   });
 
   const [preview, setPreview] = useState(null);

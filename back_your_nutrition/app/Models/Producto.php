@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-    
-    protected $table = 'producto'; 
+    protected $table = 'producto'; // Nombre de la tabla
 
-    
     protected $fillable = [
         'Nombre',
         'Precio',
@@ -18,9 +16,6 @@ class Producto extends Model
         'Id_cantidad_ingrediente',
         'Descripcion',
         'Tamaño',
-        'Calorias',
+        'Calorias'
     ];
-
-    
-    public $timestamps = false;
 }
