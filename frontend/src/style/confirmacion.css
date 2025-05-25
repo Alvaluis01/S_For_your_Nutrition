@@ -1,0 +1,42 @@
+.confirmacion-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 20px;
+  }
+  
+  .confirmacion-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .confirmacion-content h2 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+  }
+  
+  .confirmacion-content p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  .volver-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #2196F3;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+  
+  .volver-btn:hover {
+    background: #0b7dda;
+  }

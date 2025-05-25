@@ -1,0 +1,96 @@
+.inventario {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial;
+  background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco translúcido */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);   /* Sombra suave para destacar */
+}
+
+  
+  .formulario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .formulario input {
+    padding: 6px;
+    flex: 1 1 150px;
+  }
+  
+  button {
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  thead {
+    background-color: #f4f4f4;
+  }
+  
+  td, th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .bajo-stock {
+    background-color: #ffd5d5;
+    font-weight: bold;
+    color: red;
+  }
+
+  .placeholder-selected {
+  color: #999;
+}
+
+select option:not([disabled]) {
+  color: #000;
+}
+  
+.acciones {
+  display: flex;
+  gap: 5px;
+}
+
+.acciones button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.acciones .editar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.acciones .eliminar {
+  background-color: #f44336;
+  color: white;
+}
+
+.acciones-edicion {
+  display: flex;
+  gap: 5px;
+}
+
+.acciones-edicion button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.acciones-edicion .cancelar {
+  background-color: #f44336;
+  color: white;
+}
+
