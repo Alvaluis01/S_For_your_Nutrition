@@ -6,7 +6,6 @@ function LoginBatidos() {
     <div>
       {/* Menú horizontal */}
       
-
       {/* Contenido principal */}
       <div className="contenido-principal">
         <h1>Bienvenido Prearador de Batidos!</h1>
