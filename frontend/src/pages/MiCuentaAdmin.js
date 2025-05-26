@@ -70,21 +70,20 @@ function RegistroPersona() {
   return (
 
 
-<div className="comprar-container">
-  
-<nav className="menu-cliente">
-        <div className="contenido-cliente">
-          <div className="logo">
-          <h2>S´ FOR YOUR NUTRITION</h2>
+<div >
+  <nav className="menu-cliente">
+          <div className="contenido-cliente">
+            <div className="logo">
+              <h2>S´ FOR YOUR NUTRITION</h2>
+            </div>
+            <ul className="menu-links">
+              <li><Link to="/pedidos">Pedidos</Link></li>
+              <li><Link to="/notificaciones">Notificaciones</Link></li>
+              <li><Link to="/inventario">Inventario</Link></li>
+              <li><Link to="/micuentaadmin">Mi Cuenta</Link></li>
+            </ul>
           </div>
-          <ul className="menu-links">
-            <li><Link to="/productos">Productos</Link></li> {/* Enlace para productos */}
-            <li><a href="#">Inventario</a></li>
-            <li><a href="#">Mi Cuenta</a></li>
-            
-          </ul>
-        </div>
-      </nav>
+        </nav>
 
     <div>
         {/* Menú horizontal */}

@@ -322,7 +322,7 @@ function Pedidos() {
   };
 
   return (
-    <div className="pedidos-container">
+    <div >
       <nav className="menu-cliente">
         <div className="contenido-cliente">
           <div className="logo">

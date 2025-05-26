@@ -68,7 +68,7 @@ function RegistroPersona() {
   };
 
   return (
-    <div className="comprar-container">
+    <div >
       <nav className="menu-cliente">
         <div className="logo">
           <h2>S´ FOR YOUR NUTRITION</h2>
@@ -76,7 +76,7 @@ function RegistroPersona() {
         <ul className="menu-links">
           <li><Link to="/comprar">Ordenar</Link></li>
           <li><Link to="/carrito">Carrito</Link></li>
-          <li><Link to="/mi-cuenta">Mi Cuenta</Link></li>
+          <li><Link to="/micuentacliente">Mi Cuenta</Link></li>
         </ul>
       </nav>
 

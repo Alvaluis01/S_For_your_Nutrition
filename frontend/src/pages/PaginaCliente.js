@@ -43,7 +43,7 @@ function PaginaCliente() {
   };
 
   return (
-      <div className="comprar-container">
+      <div >
         <nav className="menu-cliente">
           <div className="logo">
             <h2>S´ FOR YOUR NUTRITION</h2>
