@@ -11,11 +11,12 @@ function Menu() {
 
   return (
     <nav className="navbar">
-      <Link to="/">Inicio</Link>
-      <Link to="/acerca">Acerca de nosotros</Link>
-      <Link to="/contacto">Contáctanos</Link>
-      <Link to="/login">Iniciar sesión</Link>
-    </nav>
+  <Link className="menu-link" to="/">Inicio</Link>
+  <Link className="menu-link" to="/acerca">Acerca de nosotros</Link>
+  <Link className="menu-link" to="/contacto">Contáctanos</Link>
+  <Link className="menu-link" to="/login">Iniciar sesión</Link>
+</nav>
+
   );
 }
 

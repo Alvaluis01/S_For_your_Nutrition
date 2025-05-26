@@ -1,4 +1,30 @@
 
+.navbar {
+  background-color: #1A9E53;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.menu-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.menu-link:hover {
+  background-color: #c4f0d2; /* Fondo al pasar el mouse */
+  color: #1A9E53; /* Texto cambia de color */
+  text-decoration: none;
+}
+
+
+
 .auth-container {
   max-width: 400px;
   margin: 50px auto; /* Cambiado de solo "auto" a "50px auto" para agregar espacio arriba */
