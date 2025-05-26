@@ -1,3 +1,8 @@
+/* Global Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* Estilo general del contenedor */
 .pedidos-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -16,7 +21,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Botón principal */
+/* Botón principal (Registrar Pedido) */
 .btn-registrar {
   background-color: #4a6fa5;
   color: white;
@@ -28,6 +33,9 @@
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  min-width: 180px; /* Ajustado para un tamaño más generoso y uniforme */
+  text-align: center;
+  display: inline-block; /* Crucial para min-width */
 }
 
 .btn-registrar:hover {
@@ -96,6 +104,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap; /* Evita que el texto del estado se rompa en varias líneas */
 }
 
 .estado-pedido.pendiente {
@@ -110,13 +119,14 @@
   border: 1px solid #bee5eb;
 }
 
-.estado-pedido.en\ preparación {
+/* Using attribute selectors for status with spaces */
+.estado-pedido[class*="en preparación"] {
   background-color: #fff8e1;
   color: #856404;
   border: 1px solid #ffecb3;
 }
 
-.estado-pedido.listo\ para\ entrega {
+.estado-pedido[class*="listo para entrega"] {
   background-color: #e8f5e9;
   color: #2e7d32;
   border: 1px solid #c8e6c9;
@@ -148,25 +158,48 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #2c3e50;
-  margin-top: 15px !important;
+  margin-top: 15px;
 }
 
-/* Acciones del pedido */
-.pedido-acciones {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
+/* Estilo para el display del total */
+.total-display {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 5px;
 }
 
-.btn-editar, .btn-eliminar {
+/* Clase base para uniformar todos los botones de acción */
+/* Aplica a editar, eliminar, guardar, cancelar, y editar producto */
+.btn-base {
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
+  min-width: 120px; /* Ancho mínimo para uniformidad. Ajusta según necesidad. */
+  text-align: center;
+  display: inline-block; /* Crucial para min-width */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para todos los botones */
 }
 
+.btn-base:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-base:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+
+/* Botones específicos que usan btn-base */
 .btn-editar {
   background-color: #3498db;
   color: white;
@@ -184,6 +217,36 @@
 .btn-eliminar:hover {
   background-color: #c0392b;
 }
+
+.btn-guardar {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.btn-guardar:hover {
+  background-color: #27ae60;
+}
+
+.btn-cancelar {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background-color: #7f8c8d;
+}
+
+.btn-editar-producto {
+  background-color: #3498db; /* Mismo color que editar principal */
+  color: white;
+  padding: 8px 10px; /* Mantener un padding un poco más pequeño para botones dentro de ítems */
+  font-size: 0.85rem;
+}
+
+.btn-editar-producto:hover {
+  background-color: #2980b9;
+}
+
 
 /* Formulario de edición */
 .editar-pedido {
@@ -204,7 +267,8 @@
   color: #2c3e50;
 }
 
-.form-group input, .form-group select {
+.form-group input:not([type="radio"]),
+.form-group select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -251,20 +315,6 @@
   color: #2c3e50;
 }
 
-.btn-editar-producto {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: background-color 0.2s ease;
-}
-
-.btn-editar-producto:hover {
-  background-color: #2980b9;
-}
 
 /* Estilo para la lista de ingredientes */
 .ingredientes-list {
@@ -338,33 +388,8 @@
   flex-wrap: wrap;
 }
 
-.btn-guardar, .btn-cancelar {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-}
 
-.btn-guardar {
-  background-color: #2ecc71;
-  color: white;
-}
-
-.btn-guardar:hover {
-  background-color: #27ae60;
-}
-
-.btn-cancelar {
-  background-color: #95a5a6;
-  color: white;
-}
-
-.btn-cancelar:hover {
-  background-color: #7f8c8d;
-}
-
-/* Acciones de edición */
+/* Acciones de edición (para el formulario de pedido) */
 .acciones-edicion {
   display: flex;
   gap: 15px;
@@ -394,8 +419,46 @@
   font-size: 1.1rem;
 }
 
+/* Ajuste del formulario */
+.formulario-pedido {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Tipo de pedido (radio buttons) */
+/* Clase que se aplica al contenedor de los radio buttons */
+.tipo-pedido-group {
+  display: flex;
+  align-items: center; /* Alinea verticalmente los items (labels) */
+  gap: 20px; /* Espacio entre los grupos de radio */
+  margin-top: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap; /* Permite que se envuelvan en pantallas pequeñas */
+}
+
+.tipo-pedido-group label {
+  display: flex;
+  align-items: center; /* Asegura que el radio y el texto estén alineados */
+  gap: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Radio personalizado opcional */
+input[type="radio"] {
+  accent-color: #4a6fa5;
+  transform: scale(1.2);
+  cursor: pointer;
+  /* Asegura que no se aplique width: 100% */
+  width: auto;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+  .pedidos-container {
+    padding: 10px;
+  }
   .pedido-header {
     flex-direction: column;
     align-items: flex-start;
@@ -409,24 +472,9 @@
   
   .pedido-acciones {
     flex-direction: column;
+    gap: 8px;
   }
   
-  .ingredientes-options {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  /* Estilo para el display del total */
-.total-display {
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 6px;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 5px;
-}
-
-/* Mejoras en el responsive */
-@media (max-width: 768px) {
   .editar-pedido {
     padding: 10px;
   }
@@ -439,13 +487,28 @@
     grid-template-columns: 1fr;
   }
   
-  .acciones-edicion, .acciones-producto {
+  .acciones-edicion,
+  .acciones-producto {
     flex-direction: column;
     gap: 8px;
   }
   
-  .btn-guardar, .btn-cancelar, .btn-editar, .btn-eliminar {
+  /* Asegura que todos los botones sean de ancho completo en móvil */
+  .btn-registrar,
+  .btn-base { /* Aplicamos a la clase base de botones */
     width: 100%;
+    min-width: auto; /* Resetea el min-width para que tome el 100% */
+    padding: 8px 10px; /* Ajusta el padding para móviles si es necesario */
   }
-}
+
+  .btn-editar-producto { /* Asegura que el botón de editar producto también sea 100% si lo deseas */
+    width: 100%;
+    min-width: auto;
+    padding: 8px 10px; /* Un poco menos de padding para que se vea bien en items de producto */
+  }
+
+  .tipo-pedido-group {
+    flex-direction: column; /* Apila los radio buttons en móvil */
+    align-items: flex-start; /* Alinea al inicio cuando apilados */
+  }
 }

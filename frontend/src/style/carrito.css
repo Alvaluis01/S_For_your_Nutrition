@@ -13,6 +13,16 @@
   margin-bottom: 20px;
 }
 
+
+.metodo-entrega {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+
+
 .btn-comprar {
   background: #1976d2;
   color: white;
@@ -20,6 +30,7 @@
   border-radius: 4px;
   text-decoration: none;
   display: inline-block;
+  font-weight: bold;
 }
 
 .items-carrito {
@@ -28,9 +39,20 @@
 
 .item-carrito {
   display: flex;
+  flex-direction: column;
   padding: 15px;
   border-bottom: 1px solid #eee;
   gap: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+@media(min-width: 768px) {
+  .item-carrito {
+    flex-direction: row;
+  }
 }
 
 .item-imagen-container {
@@ -53,12 +75,13 @@
 }
 
 .btn-cantidad {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ddd;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
   background: #f5f5f5;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  border-radius: 6px;
 }
 
 .btn-cantidad:disabled {
@@ -70,6 +93,7 @@
   margin: 0 10px;
   min-width: 20px;
   text-align: center;
+  font-weight: bold;
 }
 
 .item-info {
@@ -80,7 +104,7 @@
   margin: 10px 0;
   background: #f9f9f9;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .ingredientes-seleccionados ul {
@@ -92,6 +116,7 @@
   display: flex;
   gap: 15px;
   margin: 15px 0;
+  flex-wrap: wrap;
 }
 
 .btn-modificar {
@@ -99,8 +124,9 @@
   color: white;
   border: none;
   padding: 8px 15px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .btn-eliminar {
@@ -108,8 +134,9 @@
   color: white;
   border: none;
   padding: 8px 15px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .edicion-ingredientes {
@@ -119,24 +146,41 @@
 .lista-ingredientes {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
+  gap: 12px;
+  margin: 10px 0 20px;
+  justify-content: flex-start;
 }
 
 .ingrediente-option {
-  background: #f0f0f0;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 14px;
-  display: flex;
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 20px;
+  padding: 8px 16px;
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
 }
+
+.ingrediente-option:hover {
+  background: #bbdefb;
+}
+
+.ingrediente-option input[type="checkbox"] {
+  accent-color: #1976d2;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
 
 .acciones-edicion {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .btn-guardar {
@@ -144,22 +188,25 @@
   color: white;
   border: none;
   padding: 8px 15px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .btn-cancelar {
   background: #f0f0f0;
   border: none;
   padding: 8px 15px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .resumen-carrito {
   background: #f9f9f9;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .total {
@@ -173,6 +220,8 @@
 .acciones-carrito {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .btn-vaciar {
@@ -180,8 +229,9 @@
   color: white;
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .btn-finalizar {
@@ -189,11 +239,54 @@
   color: white;
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .subtotal {
   font-weight: bold;
   margin-top: 10px;
+}
+
+.producto-resumen {
+  margin-bottom: 15px;
+}
+
+.ingredientes-resumen {
+  margin-top: 5px;
+  margin-left: 20px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.comprar-container {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 30px;
+  border-radius: 16px;
+  margin: 30px auto;
+  max-width: 1100px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.carrito-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.carrito-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.btn-volver {
+  background: #90caf9;
+  color: #0d47a1;
+  padding: 8px 15px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
 }

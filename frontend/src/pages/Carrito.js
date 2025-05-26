@@ -199,7 +199,7 @@ const Carrito = () => {
 
             <div className="tipo-pedido-selector">
               <h4>Tipo de pedido:</h4>
-              <div className="opciones-tipo-pedido">
+              <div className="metodo-entrega">
                 <label>
                   <input
                     type="radio"
@@ -208,7 +208,7 @@ const Carrito = () => {
                     checked={tipoPedido === 'local'}
                     onChange={() => setTipoPedido('local')}
                   />
-                  Para recoger en local
+                   Para recoger en local
                 </label>
                 <label>
                   <input
@@ -218,7 +218,7 @@ const Carrito = () => {
                     checked={tipoPedido === 'domicilio'}
                     onChange={() => setTipoPedido('domicilio')}
                   />
-                  Para domicilio
+                   Para domicilio
                 </label>
               </div>
             </div>
