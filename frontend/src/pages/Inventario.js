@@ -163,18 +163,20 @@ const Inventario = () => {
   return (
     <div>
       <div>
-        <nav className="menu-cliente">
-          <div className="contenido-cliente">
-            <div className="logo">
-              <h2>S´ FOR YOUR NUTRITION</h2>
-            </div>
-            <ul className="menu-links">
-              <li><Link to="/pedidos">Pedidos</Link></li>
-              <li><Link to="/carrito">Notificaciones</Link></li>
-              <li><Link to="/carrito">Inventario</Link></li>
-            </ul>
-          </div>
-        </nav>
+        
+              <nav className="menu-cliente">
+                <div className="contenido-cliente">
+                  <div className="logo">
+                    <h2>S´ FOR YOUR NUTRITION</h2>
+                  </div>
+                  <ul className="menu-links">
+                    <li><Link to="/pedidos">Pedidos</Link></li>
+                    <li><Link to="/notificaciones">Notificaciones</Link></li>
+                    <li><Link to="/inventario">Inventario</Link></li>
+                    <li><Link to="/micuentaadmin">Mi Cuenta</Link></li>
+                  </ul>
+                </div>
+              </nav>
         <h1>Bienvenido nuevamente Admin🥤</h1>
       </div>
 
